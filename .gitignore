@@ -1,0 +1,15 @@
+Makefile
+*~
+.DS_Store
+*.rej
+*.orig
+*.tar.gz
+etc/pkgmgr.cfg
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+thirdparty
+README
+!thirdparty/Makefile.am
+!thirdparty/Makefile.in

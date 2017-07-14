@@ -1,0 +1,239 @@
+#!/usr/bin/env perl
+
+use lib qw(); # PERL5LIB
+use FindBin;
+# PERL5LIB
+use lib "$FindBin::RealBin/../lib"; use lib "$FindBin::RealBin/../thirdparty/lib/perl5"; # LIBDIR
+use strict;
+use warnings;
+
+use Pod::Usage;
+use Getopt::Long qw(:config posix_default no_ignore_case);
+use File::Basename qw(basename);
+use PkgMgr::Config;
+use PkgMgr;
+use PkgMgr;
+use Data::Dumper;
+
+my $VERSION = '0.dev'; # VERSION
+
+#fix perldoc pager if not set
+$ENV{PERLDOC_PAGER} ||= '/usr/bin/less -rins' if -x '/usr/bin/less';
+
+my $pkgMgr = PkgMgr->new();
+my $pkgUtils  = PkgMgr::Utils->new();
+
+sub listPackages {   
+    return $pkgMgr->fetchPackages(shift, shift, shift, [ @ARGV, @{$pkgUtils->getSTDIN()} ]);
+}
+
+sub printPackages {
+    my $packages = shift;
+    
+    print join ("\n", map { $_->{'pkg.fmri'} } @$packages) . (@$packages ? "\n" : '');
+}
+
+sub processPackages {
+    my $config  = shift;
+    my $repo    = shift;
+    my $opts    = shift;
+
+    my $packages = listPackages($config, $repo, ($opts->{staging} ? { src => 1 } : { staging => 1 }));
+    my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
+    
+    $pkgMgr->needsSigning($config, $repo) && (!$pkgMgr->hasStaging($config, $repo)
+        || $opts->{staging}) && do {
+        
+        print "Signing the following packages in source repository:\n\n";
+        printPackages($packages);
+        
+        askContinue() if !$opts->{y};
+        
+        $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
+    };
+    
+    my ($srcRepo, $dstRepo) = $pkgMgr->getSourceDestRepos($config, $repo, $opts);
+    
+    print "Publishing the following packages from '$srcRepo' to '$dstRepo':\n\n";
+    printPackages($packages);
+    
+    askContinue() if !$opts->{y};
+    
+    $pkgMgr->publishPackages($config, $repo, $opts, $pkgList);
+}
+
+sub askContinue {
+    print "\nDo you want to continue [y/N]? ";
+    chomp(my $check = <STDIN>);
+
+    $check !~ /^y(?:es)?$/i and exit 0;
+}
+
+sub main {
+    my $mainOpt = shift;
+    defined $mainOpt or pod2usage(1);
+
+    my $pkgConfig = PkgMgr::Config->new();
+    
+    for ($mainOpt) {
+        /^list$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig();
+            
+            my $opts = {};
+            GetOptions($opts, qw(t|time=s src dst staging)) or exit 1;
+            
+            $opts->{t} and warn "WARNING: option 't' not yet implemented...\n";
+            
+            printPackages(listPackages($config, $repo, $opts));
+
+            last;
+        };
+        /^rebuild$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig();
+            
+            my $opts = {};
+            GetOptions($opts, qw(src dst staging)) or exit 1;
+            
+            $pkgMgr->rebuildRepo($config, $repo, $opts);
+            
+            last;
+        };
+        /^(?:stage|publish)$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig();
+            
+            my $opts = {};
+            GetOptions($opts, qw(y n)) or exit 1;
+
+            if ($mainOpt eq 'stage') {
+                $pkgMgr->hasStaging($config, $repo)
+                    or die "ERROR: no staging repository defined for repository '$repo'.\n";
+                $opts = { %$opts, staging => 1 };
+            }
+            
+            processPackages($config, $repo, $opts);
+
+            last;
+        };
+        /^man$/ && do {
+            pod2usage(-exitstatus => 0, -verbose => 2);
+
+            last;
+        };
+        /^help$/ && do {
+            pod2usage(-exitval => 'NOEXIT');
+
+            last;
+        };
+        /^version$/ && do {
+            print basename($0) . " $VERSION\n";
+
+            last;
+        };
+        #main argument invalid
+        pod2usage(1);
+    }
+    return 1;
+}
+
+main(shift);
+
+1;
+
+__END__
+
+=head1 NAME
+
+pkgmgr - IPS package management/publishing tool.
+
+=head1 SYNOPSIS
+
+B<pkgmgr> I<command> [I<options...>]
+
+where 'command' is one of the following:
+
+    list <repo> [-t time] [--src|dst|staging] [pkg_fmri_pattern ...]
+    
+    stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    
+    publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    
+    rebuild <repo> [--src|dst|staging]
+    
+    help
+    
+    man
+    
+    version
+    
+=head1 DESCRIPTION
+
+Use pkgmgr to manage package publishing.
+
+=head2 B<list>
+
+lists all packages in the repository that match the B<pkg_fmri_pattern>,
+publisher and release. Use the B<--src|dst|staging> option to specify which
+repository to list. Defaults to B<--src> if not defined.
+
+=head2 B<stage>
+
+stages the packages that match the B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<publish>
+
+publishes the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<rebuild>
+
+initiates repository rebuild. Use the B<--src|dst|staging> option to specify which
+repository to list. Defaults to B<--src> if not defined.
+
+=head1 EXAMPLES
+
+list all packages in the staging repository of 'r151022' containing the string 'gnu'
+
+    pkgmgr list r151022 --staging '*gnu*'
+
+stage all packages that have changed within the last 2 hours for repository 'r151022'
+
+    pkgmgr list r151022 -t 2h | pkgmgr stage r151022
+
+publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
+
+    cat pkg_list.txt | pkgmgr publish bloody
+
+rebuild remote/destination bloody repository
+
+    pkgmgr rebuild bloody --dst
+    
+=head1 COPYRIGHT
+
+Copyright (c) 2017 by OmniOS Community Edition. All rights reserved.
+
+=head1 LICENSE
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see L<http://www.gnu.org/licenses/>.
+
+=head1 AUTHOR
+
+S<Dominik Hassler E<lt>hadfl@omniosce.orgE<gt>>
+
+=head1 HISTORY
+
+2017-07-15 had Initial Version
+
+=cut

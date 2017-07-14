@@ -1,0 +1,41 @@
+sudo: false
+
+language: perl
+
+git:
+  depth: 3
+  
+perl:
+  - "5.22"
+  - "5.20"
+  - "5.18"
+  - "5.16"
+  - "5.14"
+  - "5.12"
+  - "5.10"
+
+# disable cpanm
+
+before_install: true
+
+install: true
+
+before_script:
+  - perlbrew use $PERLVERS
+  - ./bootstrap
+
+script:
+  - ./configure
+  - make
+  - make dist
+  - mkdir ~/src
+  - cp pkgmgr*.tar.gz ~/src
+  - cd ~/src
+  - tar xvf pkgmgr*gz
+  - cd pkgmgr*/
+  - ./configure --prefix=$HOME/pkgmgr
+  - make
+  - make install
+  - cd $HOME/pkgmgr/bin  
+  - ./pkgmgr version
+

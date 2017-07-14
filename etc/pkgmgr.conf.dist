@@ -1,0 +1,37 @@
+{
+    "GENERAL" : {
+        "certFile" : "<path>",
+        "keyFile"  : "<path>"
+    },
+    "REPOS" : {
+        "r151022" : {
+            "signing"     : "yes",
+            "srcRepo"     : "<path/URL>",
+            "dstRepo"     : "<path/URL>",
+            "stagingRepo" : "<path/URL>",
+            "publisher"   : "omnios",
+            "release"     : "r151022"
+        },
+        "bloody" : {
+            "signing"     : "no",
+            "srcRepo"     : "<path/URL>",
+            "dstRepo"     : "<path/URL>",
+            "publisher"   : "omnios",
+            "release"     : "r151023"
+        },
+        "r151022-extra" : {
+            "signing"     : "no",
+            "srcRepo"     : "<path/URL>",
+            "dstRepo"     : "<path/URL>",
+            "publisher"   : "extra.omnios",
+            "release"     : "r151022"
+        },
+        "bloody-extra" : {
+            "signing"     : "no",
+            "srcRepo"     : "<path/URL>",
+            "dstRepo"     : "<path/URL>",
+            "publisher"   : "extra.omnios",
+            "release"     : "r151023"
+        }
+    }
+}

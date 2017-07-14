@@ -1,0 +1,86 @@
+=head1 NAME
+
+pkgmgr - IPS package management/publishing tool.
+
+=head1 SYNOPSIS
+
+B<pkgmgr> I<command> [I<options...>]
+
+where 'command' is one of the following:
+
+    list <repo> [-t time] [--src|dst|staging] [pkg_fmri_pattern ...]
+    
+    stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    
+    publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    
+    rebuild <repo> [--src|dst|staging]
+    
+    help
+    
+    man
+    
+    version
+    
+=head1 DESCRIPTION
+
+Use pkgmgr to manage package publishing.
+
+=head2 B<list>
+
+lists all packages in the repository that match the B<pkg_fmri_pattern>,
+publisher and release. Use the B<--src|dst|staging> option to specify which
+repository to list. Defaults to B<--src> if not defined.
+
+=head2 B<stage>
+
+stages the packages that match the B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<publish>
+
+publishes the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<rebuild>
+
+initiates repository rebuild. Use the B<--src|dst|staging> option to specify which
+repository to list. Defaults to B<--src> if not defined.
+
+=head1 EXAMPLES
+
+list all packages in the staging repository of 'r151022' containing the string 'gnu'
+    pkgmgr list r151022 --staging '*gnu*'
+stage all packages that have changed within the last 2 hours for repository 'r151022'
+    pkgmgr list r151022 -t 2h | pkgmgr stage r151022
+publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
+    cat pkg_list.txt | pkgmgr publish bloody
+rebuild remote/destination bloody repository
+    pkgmgr rebuild bloody --dst
+    
+=head1 COPYRIGHT
+
+Copyright (c) 2017 by OmniOS Community Edition. All rights reserved.
+
+=head1 LICENSE
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see L<http://www.gnu.org/licenses/>.
+
+=head1 AUTHOR
+
+S<Dominik Hassler E<lt>hadfl@omniosce.orgE<gt>>
+
+=head1 HISTORY
+
+2017-07-15 had Initial Version
+
+=cut
