@@ -50,12 +50,19 @@ repository to list. Defaults to B<--src> if not defined.
 =head1 EXAMPLES
 
 list all packages in the staging repository of 'r151022' containing the string 'gnu'
+
     pkgmgr list r151022 --staging '*gnu*'
+
 stage all packages that have changed within the last 2 hours for repository 'r151022'
+
     pkgmgr list r151022 -t 2h | pkgmgr stage r151022
+
 publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
+
     cat pkg_list.txt | pkgmgr publish bloody
+
 rebuild remote/destination bloody repository
+
     pkgmgr rebuild bloody --dst
     
 =head1 COPYRIGHT

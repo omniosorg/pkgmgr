@@ -184,13 +184,28 @@ repository to list. Defaults to \fB\-\-src\fR if not defined.
 .SH "EXAMPLES"
 .IX Header "EXAMPLES"
 list all packages in the staging repository of 'r151022' containing the string 'gnu'
-    pkgmgr list r151022 \-\-staging '*gnu*'
+.PP
+.Vb 1
+\&    pkgmgr list r151022 \-\-staging \*(Aq*gnu*\*(Aq
+.Ve
+.PP
 stage all packages that have changed within the last 2 hours for repository 'r151022'
-    pkgmgr list r151022 \-t 2h | pkgmgr stage r151022
+.PP
+.Vb 1
+\&    pkgmgr list r151022 \-t 2h | pkgmgr stage r151022
+.Ve
+.PP
 publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
-    cat pkg_list.txt | pkgmgr publish bloody
+.PP
+.Vb 1
+\&    cat pkg_list.txt | pkgmgr publish bloody
+.Ve
+.PP
 rebuild remote/destination bloody repository
-    pkgmgr rebuild bloody \-\-dst
+.PP
+.Vb 1
+\&    pkgmgr rebuild bloody \-\-dst
+.Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
 Copyright (c) 2017 by OmniOS Community Edition. All rights reserved.
