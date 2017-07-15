@@ -7,6 +7,7 @@ use warnings;
 my $PKGREPO = '/usr/bin/pkgrepo';
 my $PKGRECV = '/usr/bin/pkgrecv';
 my $PKGSIGN = '/usr/bin/pkgsign';
+my $PKG     = '/usr/bin/pkg';
 
 # private methods
 my $getRepoPath = sub {
@@ -35,6 +36,17 @@ my $getReleasePublisher = sub {
     my $repo   = shift;
     
     return ($config->{REPOS}->{$repo}->{release}, $config->{REPOS}->{$repo}->{publisher});
+};
+
+my $isSigned = sub {
+    my $repoPath = shift;
+    my $fmri     = shift;
+
+    my @cmd = ($PKG, qw(contents -g), $repoPath, '-m', $fmri);
+
+    open my $pkg, '-|', @cmd or die "ERROR: executing '$PKG'.\n";
+
+    return grep { /^signature/ } (<$pkg>);
 };
 
 # constructor
@@ -67,11 +79,11 @@ sub fetchPackages {
     my $repo   = shift;
     my $opt    = shift;
     my $fmri   = shift;
-    
+
     $fmri = [ '*' ] if !@$fmri;
-    
+
     my $repoPath = $getRepoPath->($config, $repo, $opt);
-    
+
     my @cmd = ($PKGREPO, qw(list -F json -s), $repoPath, @$fmri);
     open my $cmd, '-|', @cmd or die "ERROR: executing '$PKGREPO': $!\n";
 
@@ -87,14 +99,18 @@ sub signPackages {
     my $repo   = shift;
     my $opts   = shift;
     my $pkgs   = shift;
-    
+
     my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
-    
-    for my $pkg (@$pkgs) {
+
+    for my $fmri (@$pkgs) {
+
+        next if $isSigned->($repoPath, $fmri);
+
         my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{certFile}, '-k', $config->{GENERAL}->{keyFile},
-            ($opts->{n} ? '-n' : ()), '-s', $repoPath, $pkg);
-        
-        system (@cmd) && die "ERROR: signing package '$pkg'.\n";
+            ($opts->{n} ? '-n' : ()), '-s', $repoPath, $fmri);
+
+        system (@cmd) && die "ERROR: signing package '$fmri'.\n";
+        print "done.\n";
     }
 }
 
@@ -107,7 +123,7 @@ sub getSourceDestRepos {
     my $srcRepo = $getRepoPath->($config, $repo, ($opts->{staging}
         || !$self->hasStaging($config, $repo) ? { src => 1 } : { staging => 1 }));
     my $dstRepo = $getRepoPath->($config, $repo, ($opts->{staging} ? { staging => 1 } : { dst => 1 }));
-    
+
     return ($srcRepo, $dstRepo);
 }
 
@@ -117,15 +133,15 @@ sub publishPackages {
     my $repo   = shift;
     my $opts   = shift;
     my $pkgs   = shift;
-    
+
     my ($srcRepo, $dstRepo) = $self->getSourceDestRepos($config, $repo, $opts);
-    
-    for my $pkg (@$pkgs) {
+
+    for my $fmri (@$pkgs) {
         my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
             '--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile},
-            qw(-m latest), $pkg);
-            
-        system (@cmd) && die "ERROR: publishing package '$pkg'.\n";
+            qw(-m latest), $fmri);
+
+        system (@cmd) && die "ERROR: publishing package '$fmri'.\n";
     }
 }
 
@@ -134,12 +150,12 @@ sub rebuildRepo {
     my $config = shift;
     my $repo   = shift;
     my $opts   = shift;
-    
+
     my $repoPath = $getRepoPath->($config, $repo, $opts);
-    
+
     my @cmd = ($PKGREPO, qw(rebuild -s), $repoPath, ($opts->{staging} || $opts->{dst} ? ('--key',
         $config->{GENERAL}->{keyFile}, '--cert', $config->{GENERAL}->{certFile}) : ()));
-        
+
     system (@cmd) && die "ERROR: rebuilding repo '$repoPath'.\n";
 }
 
