@@ -19,8 +19,8 @@ my $VERSION = '0.dev'; # VERSION
 #fix perldoc pager if not set
 $ENV{PERLDOC_PAGER} ||= '/usr/bin/less -rins' if -x '/usr/bin/less';
 
-my $pkgMgr = PkgMgr->new();
-my $pkgUtils  = PkgMgr::Utils->new();
+my $pkgMgr   = PkgMgr->new();
+my $pkgUtils = PkgMgr::Utils->new();
 
 sub listPackages {   
     return $pkgMgr->fetchPackages(shift, shift, shift, [ @ARGV, @{$pkgUtils->getSTDIN()} ]);
@@ -63,6 +63,8 @@ sub processPackages {
 }
 
 sub askContinue {
+    return if !$pkgUtils->isaTTY();
+
     print "\nDo you want to continue [y/N]? ";
     chomp(my $check = <STDIN>);
 
@@ -72,9 +74,6 @@ sub askContinue {
 sub main {
     my $mainOpt = shift;
     defined $mainOpt or pod2usage(1);
-
-    # set '-y' option if it is not a tty to suppress user interaction
-    push @ARGV, '-y' if !$pkgUtils->isaTTY();
 
     my $pkgConfig = PkgMgr::Config->new();
     

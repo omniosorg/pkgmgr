@@ -132,13 +132,11 @@ sub publishPackages {
 
     my ($srcRepo, $dstRepo) = $self->getSourceDestRepos($config, $repo, $opts);
 
-    for my $fmri (@$pkgs) {
-        my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
-            '--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile},
-            qw(-m latest), $fmri);
+    my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
+        '--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile},
+        qw(-m latest), @$pkgs);
 
-        system (@cmd) && die "ERROR: publishing package '$fmri'.\n";
-    }
+    system (@cmd) && die "ERROR: publishing packages: $!\n";
 }
 
 sub rebuildRepo {
