@@ -87,6 +87,7 @@ sub new {
 
 sub loadConfig {
     my $self     = shift;
+    my $repo     = shift;
     my $confFile = shift // $CONFILE;
     
     open my $fh, '<', $confFile or die "ERROR: opening config file '$confFile': $!\n";
@@ -97,6 +98,9 @@ sub loadConfig {
     
     my $ec = $self->{cfg}->validate($config);
     $ec->count and die join ("\n", map { $_->stringify } @{$ec->{errors}}) . "\n";
+
+    exists $config->{REPOS}->{$repo}
+        or die "ERROR: repository '$repo' not defined in config file.\n";
 
     return $config;
 }

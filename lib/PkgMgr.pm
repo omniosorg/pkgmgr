@@ -15,8 +15,6 @@ my $getRepoPath = sub {
     my $repo   = shift;
     my $opt    = shift;
     
-    exists $config->{REPOS}->{$repo} or die "ERROR: repository '$repo' not defined in config file.\n";
-
     $opt->{staging} && do {
         exists $config->{REPOS}->{$repo}->{stagingRepo}
             or die "ERROR: no staging repository defined in config file.\n";
@@ -103,14 +101,12 @@ sub signPackages {
     my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
 
     for my $fmri (@$pkgs) {
-
         next if $isSigned->($repoPath, $fmri);
 
         my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{certFile}, '-k', $config->{GENERAL}->{keyFile},
             ($opts->{n} ? '-n' : ()), '-s', $repoPath, $fmri);
 
         system (@cmd) && die "ERROR: signing package '$fmri'.\n";
-        print "done.\n";
     }
 }
 

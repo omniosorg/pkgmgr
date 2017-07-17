@@ -47,9 +47,14 @@ sub elemOf {
     }
 }
 
+sub isaTTY {
+    my $self = shift;
+    return isatty(*STDIN);
+}
+
 sub getSTDIN {
     my $self = shift;
-    return isatty(*STDIN) ? [] : [ split /[\s\n]+/, do { local $/; <STDIN>; } ];
+    return $self->isaTTY() ? [] : [ split /[\s\n]+/, do { local $/; <STDIN>; } ];
 }
 
 1;
