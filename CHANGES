@@ -1,3 +1,21 @@
+commit 212940ea9fffe7563884f4b26f39b256910a2aaf
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Jul 17 02:27:51 2017 +0200
+
+    bugfixes
+
+commit 2f6f0b35bd196e6bf31ccb7011569520f2340e7f
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Jul 15 21:18:35 2017 +0200
+
+    add check if package is already signed
+
+commit 8c3cb6c7be21f524ce885e910ff266ba45531338
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Jul 15 20:30:03 2017 +0200
+
+    ready for 0.1.0
+
 commit 95139b1f896c6280905a724df41f67934b9f4c48
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Fri Jul 14 22:54:27 2017 +0200
