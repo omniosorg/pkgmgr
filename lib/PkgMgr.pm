@@ -2,6 +2,7 @@ package PkgMgr;
 
 use strict;
 use warnings;
+use Time::Piece;
 
 # constants/tools
 my $PKGREPO = '/usr/bin/pkgrepo';
@@ -23,6 +24,10 @@ my $getRepoPath = sub {
     };
     
     return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dstRepo' : 'srcRepo'};
+};
+
+my $getEpoch = sub {
+    return Time::Piece->strptime(shift, '%Y%m%dT%H%M%SZ')->epoch;
 };
 
 my $extractPublisher = sub {
@@ -75,19 +80,21 @@ sub fetchPackages {
     my $self   = shift;
     my $config = shift;
     my $repo   = shift;
-    my $opt    = shift;
+    my $opts   = shift;
     my $fmri   = shift;
 
     $fmri = [ '*' ] if !@$fmri;
+    my $epoch = $opts->{t} ? $getEpoch->($opts->{t}) : 0;
 
-    my $repoPath = $getRepoPath->($config, $repo, $opt);
+    my $repoPath = $getRepoPath->($config, $repo, $opts);
 
     my @cmd = ($PKGREPO, qw(list -F json -s), $repoPath, @$fmri);
     open my $cmd, '-|', @cmd or die "ERROR: executing '$PKGREPO': $!\n";
 
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
     return [ grep { $_->{branch} eq "0.$release"
-        && $extractPublisher->($_) eq $publisher }
+        && $extractPublisher->($_) eq $publisher
+        && $getEpoch->($_->{timestamp}) >= $epoch }
         @{JSON::PP->new->decode(<$cmd>)} ];
 }
 
