@@ -8,7 +8,7 @@ B<pkgmgr> I<command> [I<options...>]
 
 where 'command' is one of the following:
 
-    list <repo> [-t time] [--src|dst|staging] [pkg_fmri_pattern ...]
+    list <repo> [-t <ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
     
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
@@ -31,6 +31,8 @@ Use pkgmgr to manage package publishing.
 lists all packages in the repository that match the B<pkg_fmri_pattern>,
 publisher and release. Use the B<--src|dst|staging> option to specify which
 repository to list. Defaults to B<--src> if not defined.
+If the B<-t> option is used, only packages that have a newer ISO timestamp will
+be listed.
 
 =head2 B<stage>
 

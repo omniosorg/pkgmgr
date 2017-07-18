@@ -1,3 +1,21 @@
+commit e5efe7749b24c52b8d57e29d7d34c1de1cfff066
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Jul 18 18:52:40 2017 +0200
+
+    implement '-t' option
+
+commit fe27c54e3e3fc579e90e9707e8bb6e2c794b8f2e
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Jul 17 12:01:56 2017 +0200
+
+    publish in one transaction
+
+commit 0c44bf68bc69086b90102e2b6b3f58590544cb20
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Jul 17 02:46:09 2017 +0200
+
+    ready for 0.1.1
+
 commit 212940ea9fffe7563884f4b26f39b256910a2aaf
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Mon Jul 17 02:27:51 2017 +0200
