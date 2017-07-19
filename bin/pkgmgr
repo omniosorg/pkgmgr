@@ -127,13 +127,14 @@ sub main {
             GetOptions($opts, qw(y n)) or exit 1;
 
             my $packages = listPackages($config, $repo, { src => 1 });
+            my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
 
             print "Removing the following packages from source repository:\n\n";
             printPackages($packages);
 
             askContinue() if !$opts->{y};
 
-            $pkgMgr->removePackages($config, $repo, $opts, $packages);
+            $pkgMgr->removePackages($config, $repo, $opts, $pkgList);
             last;
         };
         /^man$/ && do {
