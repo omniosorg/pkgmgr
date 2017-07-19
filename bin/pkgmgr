@@ -12,7 +12,6 @@ use Getopt::Long qw(:config posix_default no_ignore_case);
 use File::Basename qw(basename);
 use PkgMgr::Config;
 use PkgMgr;
-use PkgMgr;
 
 my $VERSION = '0.dev'; # VERSION
 
@@ -41,8 +40,8 @@ sub processPackages {
         !$pkgMgr->hasStaging($config, $repo) ? { src => 1 } : { staging => 1 }));
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
     
-    $pkgMgr->needsSigning($config, $repo) && (!$pkgMgr->hasStaging($config, $repo)
-        || $opts->{staging}) && do {
+    $pkgMgr->needsSigning($config, $repo) && !$opts->{pull}
+        && (!$pkgMgr->hasStaging($config, $repo) || $opts->{staging}) && do {
         
         print "Signing the following packages in source repository:\n\n";
         printPackages($packages);
@@ -54,7 +53,8 @@ sub processPackages {
     
     my ($srcRepo, $dstRepo) = $pkgMgr->getSourceDestRepos($config, $repo, $opts);
     
-    print "Publishing the following packages from '$srcRepo' to '$dstRepo':\n\n";
+    print '' . ($opts->{pull} ? 'Pulling' : 'Publishing')
+        . " the following packages from '$srcRepo' to '$dstRepo':\n\n";
     printPackages($packages);
     
     askContinue() if !$opts->{y};
@@ -100,7 +100,7 @@ sub main {
 
             last;
         };
-        /^(?:stage|publish)$/ && do {
+        /^(?:stage|publish|pull)$/ && do {
             my $repo   = shift @ARGV or pod2usage(1);
             my $config = $pkgConfig->loadConfig($repo);
 
@@ -110,11 +110,30 @@ sub main {
             if ($mainOpt eq 'stage') {
                 $pkgMgr->hasStaging($config, $repo)
                     or die "ERROR: no staging repository defined for repository '$repo'.\n";
-                $opts = { %$opts, staging => 1 };
+                $opts->{staging} = 1;
             }
+
+            $opts->{pull} = 1 if ($mainOpt eq 'pull');
 
             processPackages($config, $repo, $opts);
 
+            last;
+        };
+        /^remove$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig($repo);
+
+            my $opts = {};
+            GetOptions($opts, qw(y n)) or exit 1;
+
+            my $packages = listPackages($config, $repo, { src => 1 });
+
+            print "Removing the following packages from source repository:\n\n";
+            printPackages($packages);
+
+            askContinue() if !$opts->{y};
+
+            $pkgMgr->removePackages($config, $repo, $opts, $packages);
             last;
         };
         /^man$/ && do {
@@ -160,6 +179,10 @@ where 'command' is one of the following:
     
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
+    pull <repo> [-y] [-n] [pkg_fmri_pattern ...]
+
+    remove <repo> [-y] [-n] [pkg_fmri_pattern ...]
+
     rebuild <repo> [--src|dst|staging]
     
     help
@@ -188,6 +211,17 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 =head2 B<publish>
 
 publishes the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<pull>
+
+pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<remove>
+
+removes the packages that match B<pkg_fmri_pattern>, publisher and release
+from the source repository. pkgrepo does not support remote package removal.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 =head2 B<rebuild>

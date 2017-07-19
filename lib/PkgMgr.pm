@@ -123,9 +123,17 @@ sub getSourceDestRepos {
     my $repo   = shift;
     my $opts   = shift;
 
-    my $srcRepo = $getRepoPath->($config, $repo, ($opts->{staging}
-        || !$self->hasStaging($config, $repo) ? { src => 1 } : { staging => 1 }));
-    my $dstRepo = $getRepoPath->($config, $repo, ($opts->{staging} ? { staging => 1 } : { dst => 1 }));
+    my $srcRepo = $getRepoPath->($config, $repo,
+                  $opts->{pull}                                          ? { dst => 1 }
+                : $self->hasStaging($config, $repo) && !$opts->{staging} ? { staging => 1 }
+                : { src => 1 }
+                );
+        
+    my $dstRepo = $getRepoPath->($config, $repo,
+                  $opts->{pull}    ? { src => 1 } 
+                : $opts->{staging} ? { staging => 1 }
+                : { dst => 1 }
+                );
 
     return ($srcRepo, $dstRepo);
 }
@@ -139,11 +147,27 @@ sub publishPackages {
 
     my ($srcRepo, $dstRepo) = $self->getSourceDestRepos($config, $repo, $opts);
 
-    my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
-        '--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile},
-        qw(-m latest), @$pkgs);
+    my @cert = $opts->{pull} ? ()
+        : ('--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile});
 
-    system (@cmd) && die "ERROR: publishing packages: $!\n";
+    my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
+        @cert, qw(-m latest), @$pkgs);
+
+    system (@cmd) && die 'ERROR: ' . ($opts->{pull} ? 'pulling' : 'publishing') . " packages: $!\n";
+}
+
+sub removePackages {
+    my $self   = shift;
+    my $config = shift;
+    my $repo   = shift;
+    my $opts   = shift;
+    my $pkgs   = shift;
+
+    my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
+
+    my @cmd = ($PKGREPO, qw(remove -s), $repoPath, ($opts->{n} ? '-n' : ()), @$pkgs);
+
+    system (@cmd) && die "ERROR: cannot remove packages from repo '$repoPath'.\n";
 }
 
 sub rebuildRepo {
