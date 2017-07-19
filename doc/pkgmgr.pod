@@ -14,6 +14,10 @@ where 'command' is one of the following:
     
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
+    pull <repo> [-y] [-n] [pkg_fmri_pattern ...]
+
+    remove <repo> [-y] [-n] [pkg_fmri_pattern ...]
+
     rebuild <repo> [--src|dst|staging]
     
     help
@@ -42,6 +46,17 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 =head2 B<publish>
 
 publishes the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<pull>
+
+pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<remove>
+
+removes the packages that match B<pkg_fmri_pattern>, publisher and release
+from the source repository. pkgrepo does not support remote package removal.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 =head2 B<rebuild>

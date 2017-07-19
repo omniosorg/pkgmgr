@@ -1,3 +1,21 @@
+commit 6ac39f22f1dcd4392b26baaa4a82620ef4aad2ac
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Jul 19 15:22:10 2017 +0200
+
+    bugfix: build pkglist
+
+commit 182760d2782422f8b0bf84a7bbed5ddffdbefaa8
+Author: Dominik Hassler <hadfl@cpan.org>
+Date:   Wed Jul 19 11:54:40 2017 +0200
+
+    remove and pull implemented
+
+commit d491256842914397a73af0db3c80a7229add8492
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Jul 18 19:21:24 2017 +0200
+
+    ready for 0.1.2
+
 commit e5efe7749b24c52b8d57e29d7d34c1de1cfff066
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Tue Jul 18 18:52:40 2017 +0200

@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-07-18" "0.1.2" "pkgmgr"
+.TH PKGMGR 1 "2017-07-19" "0.1.3" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -153,6 +153,10 @@ where 'command' is one of the following:
 \&    
 \&    publish <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
+\&    pull <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
+\&
+\&    remove <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
+\&
 \&    rebuild <repo> [\-\-src|dst|staging]
 \&    
 \&    help
@@ -178,6 +182,15 @@ Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
 .SS "\fBpublish\fP"
 .IX Subsection "publish"
 publishes the packages that match \fBpkg_fmri_pattern\fR, publisher and release.
+Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
+.SS "\fBpull\fP"
+.IX Subsection "pull"
+pulls the packages that match \fBpkg_fmri_pattern\fR, publisher and release.
+Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
+.SS "\fBremove\fP"
+.IX Subsection "remove"
+removes the packages that match \fBpkg_fmri_pattern\fR, publisher and release
+from the source repository. pkgrepo does not support remote package removal.
 Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
 .SS "\fBrebuild\fP"
 .IX Subsection "rebuild"
