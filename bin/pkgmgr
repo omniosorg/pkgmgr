@@ -36,8 +36,12 @@ sub processPackages {
     my $repo    = shift;
     my $opts    = shift;
 
-    my $packages = listPackages($config, $repo, ($opts->{staging} || 
-        !$pkgMgr->hasStaging($config, $repo) ? { src => 1 } : { staging => 1 }));
+    my $packages = listPackages($config, $repo,
+          $opts->{pull}                                            ? { dst => 1 }
+        : !$opts->{staging} && $pkgMgr->hasStaging($config, $repo) ? { staging => 1 }
+        : { src => 1 }
+    );
+
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
     
     $pkgMgr->needsSigning($config, $repo) && !$opts->{pull}
