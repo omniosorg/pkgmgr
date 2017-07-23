@@ -10,6 +10,15 @@ my $PKGRECV = '/usr/bin/pkgrecv';
 my $PKGSIGN = '/usr/bin/pkgsign';
 my $PKG     = '/usr/bin/pkg';
 
+my %TIME_FACTOR = (
+    s   => 1,
+    M   => 60,
+    h   => 3600,
+    d   => 3600 * 24,
+    m   => 3600 * 24 * 30,
+    y   => 3600 * 24 * 365,
+);
+
 # private methods
 my $getRepoPath = sub {
     my $config = shift;
@@ -28,6 +37,22 @@ my $getRepoPath = sub {
 
 my $getEpoch = sub {
     return Time::Piece->strptime(shift, '%Y%m%dT%H%M%SZ')->epoch;
+};
+
+my $getOptEpoch = sub {
+    my $timeOpt = shift;
+
+    # if $timeOpt is an ISO timestamp
+    return $getEpoch->($timeOpt) if ($timeOpt =~ /^\d+T\d+Z$/);
+
+    my ($value, $unit) = $timeOpt =~ /^(\d+)(\w)?$/
+        or die "ERROR: invalid interval '$timeOpt'.\n";
+    # default to seconds
+    $unit //= 's';
+    grep { $_ eq $unit } keys %TIME_FACTOR or die "ERROR: invalid time suffix '$unit'.\n";
+
+    my $time = gmtime;
+    return $time->epoch - $value * $TIME_FACTOR{$unit};
 };
 
 my $extractPublisher = sub {
@@ -84,7 +109,7 @@ sub fetchPackages {
     my $fmri   = shift;
 
     $fmri = [ '*' ] if !@$fmri;
-    my $epoch = $opts->{t} ? $getEpoch->($opts->{t}) : 0;
+    my $epoch = $opts->{t} ? $getOptEpoch->($opts->{t}) : 0;
 
     my $repoPath = $getRepoPath->($config, $repo, $opts);
 
