@@ -174,7 +174,7 @@ B<pkgmgr> I<command> [I<options...>]
 
 where 'command' is one of the following:
 
-    list <repo> [-t <ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
+    list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
     
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
@@ -201,8 +201,9 @@ Use pkgmgr to manage package publishing.
 lists all packages in the repository that match the B<pkg_fmri_pattern>,
 publisher and release. Use the B<--src|dst|staging> option to specify which
 repository to list. Defaults to B<--src> if not defined.
-If the B<-t> option is used, only packages that have a newer ISO timestamp will
-be listed.
+If the B<-t> option is used, only packages that have a more recent ISO timestamp will
+be listed or a timestamp within B<interval> timespan. B<interval> can be suffixed
+with s, M, h, d, m, y (defaults to seconds).
 
 =head2 B<stage>
 
@@ -240,6 +241,10 @@ stage all packages that have changed within the last 2 hours for repository 'r15
 
     pkgmgr list r151022 -t 2h | pkgmgr stage r151022
 
+publish all packages that have a more recent ISO timestamp than '20170701T000000Z'
+
+    pkgmgr list r151022 -t 20170701T000000Z | pkgmgr publish r151022
+
 publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
 
     cat pkg_list.txt | pkgmgr publish bloody
@@ -250,7 +255,7 @@ rebuild remote/destination bloody repository
     
 =head1 COPYRIGHT
 
-Copyright 2017 OmniOS Community Edition Association (OmniOSce)
+Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
