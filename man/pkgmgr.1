@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-07-19" "0.1.3" "pkgmgr"
+.TH PKGMGR 1 "2017-07-23" "0.1.4" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -147,7 +147,7 @@ pkgmgr \- IPS package management/publishing tool.
 where 'command' is one of the following:
 .PP
 .Vb 1
-\&    list <repo> [\-t <ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
+\&    list <repo> [\-t <interval>|<ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&    
 \&    stage <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
@@ -173,8 +173,9 @@ Use pkgmgr to manage package publishing.
 lists all packages in the repository that match the \fBpkg_fmri_pattern\fR,
 publisher and release. Use the \fB\-\-src|dst|staging\fR option to specify which
 repository to list. Defaults to \fB\-\-src\fR if not defined.
-If the \fB\-t\fR option is used, only packages that have a newer \s-1ISO\s0 timestamp will
-be listed.
+If the \fB\-t\fR option is used, only packages that have a more recent \s-1ISO\s0 timestamp will
+be listed or a timestamp within \fBinterval\fR timespan. \fBinterval\fR can be suffixed
+with s, M, h, d, m, y (defaults to seconds).
 .SS "\fBstage\fP"
 .IX Subsection "stage"
 stages the packages that match the \fBpkg_fmri_pattern\fR, publisher and release.
@@ -210,6 +211,12 @@ stage all packages that have changed within the last 2 hours for repository 'r15
 \&    pkgmgr list r151022 \-t 2h | pkgmgr stage r151022
 .Ve
 .PP
+publish all packages that have a more recent \s-1ISO\s0 timestamp than '20170701T000000Z'
+.PP
+.Vb 1
+\&    pkgmgr list r151022 \-t 20170701T000000Z | pkgmgr publish r151022
+.Ve
+.PP
 publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
 .PP
 .Vb 1
@@ -223,7 +230,7 @@ rebuild remote/destination bloody repository
 .Ve
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
-Copyright (c) 2017 by OmniOS Community Edition. All rights reserved.
+Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
 .SH "LICENSE"
 .IX Header "LICENSE"
 This program is free software: you can redistribute it and/or modify it

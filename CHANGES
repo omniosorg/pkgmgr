@@ -1,3 +1,21 @@
+commit cb0e56745ab111700061fb4af491066b4375ba4d
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 23 13:51:50 2017 +0200
+
+    pull: pkg list source bugfix
+
+commit e4f7e2485ebf630f0cf5c8d5b5af35a92d408822
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 23 13:15:31 2017 +0200
+
+    time can now also be an interval
+
+commit ddacedb1dee4e733c09069df8ea0840ba8345c99
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Jul 19 15:42:45 2017 +0200
+
+    copyright
+
 commit 31c450faa3e8abef962f3ce3daea11c1a24f008f
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Wed Jul 19 15:24:45 2017 +0200
