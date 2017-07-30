@@ -36,38 +36,45 @@ my $SCHEMA = sub {
             '\S+'   => {
                 regex   => 1,
                 members => {
-                    signing   => {
+                    signing     => {
                         description => 'sign packages (yes/no)',
                         example     => '"signing" : "yes"',
                         validator   => $sv->elemOf(qw(yes no)),
                     },
-                    srcRepo   => {
+                    srcRepo     => {
                         description => 'source (local) repository',
                         example     => '"srcRepo" : "/omniosorg/_r22_repo"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },     
-                    dstRepo   => {
+                    dstRepo     => {
                         description => 'destination (remote) repository',
                         example     => '"dstRepo" : "https://pkg.omniosce.org/r151022/core"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
                     stagingRepo => {
-                        optional => 1,
+                        optional    => 1,
                         description => 'staging repository',
                         example     => '"stagingRepo" : "https://pkg.omniosce.org/r151022/staging"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
-                    publisher => {
+                    publisher   => {
                         description => 'publisher name',
                         example     => '"publisher" : "omnios"',
                         validator   => $sv->regexp(qw/^[\w.]+$/, 'not a valid publisher name'),
                     },
-                    release   => {
+                    release     => {
                         description => 'release',
                         example     => '"release" : "r151022"',
                         transformer => sub { return (shift =~ /^r?(.*)$/)[0]; }, # remove leading 'r' if given
                         validator   => $sv->regexp(qw/^1510\d{2}$/, 'not a valid release'),
-                    }
+                    },
+                    on_hold     => {
+                        optional    => 1,
+                        array       => 1,
+                        description => 'list of FMRI patterns (regexp) not to stage or publish',
+                        example     => '"on_hold" : [ "binutils", "cherrypy" ]',
+                        validator   => sub { return undef },
+                    },
                 },
             },
         },
