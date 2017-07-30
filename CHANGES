@@ -1,3 +1,15 @@
+commit 54c2e70c180916538e634f135d311bbb8aee6a38
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 13:59:18 2017 +0200
+
+    on hold list implemented
+
+commit c79638b476886f53d97981da8573203a5bb5dcdd
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 23 17:23:20 2017 +0200
+
+    ready for 0.1.4
+
 commit cb0e56745ab111700061fb4af491066b4375ba4d
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Sun Jul 23 13:51:50 2017 +0200
