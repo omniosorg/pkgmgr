@@ -10,7 +10,8 @@
             "dstRepo"     : "<path/URL>",
             "stagingRepo" : "<path/URL>",
             "publisher"   : "omnios",
-            "release"     : "r151022"
+            "release"     : "r151022",
+            "on_hold"     : [ "gnu-binutils" ]
         },
         "bloody" : {
             "signing"     : "no",

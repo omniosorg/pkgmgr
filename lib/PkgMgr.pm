@@ -51,8 +51,7 @@ my $getOptEpoch = sub {
     $unit //= 's';
     grep { $_ eq $unit } keys %TIME_FACTOR or die "ERROR: invalid time suffix '$unit'.\n";
 
-    my $time = gmtime;
-    return $time->epoch - $value * $TIME_FACTOR{$unit};
+    return gmtime->epoch - $value * $TIME_FACTOR{$unit};
 };
 
 my $extractPublisher = sub {
