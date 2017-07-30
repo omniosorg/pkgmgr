@@ -34,4 +34,4 @@ To install the application, just run
 Configuration
 -------------
 
-Take a look at the `pkgmgr.cfg.dist` file for inspiration.
+Take a look at the `pkgmgr.conf.dist` file for inspiration.
