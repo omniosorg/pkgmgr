@@ -168,14 +168,15 @@ sub filterOnHold {
     my $repo   = shift;
     my $pkgs   = shift;
 
-    my @pkgs = @$pkgs;
+    # nothing 'on hold'. we are done.
+    return $pkgs if !exists $config->{REPOS}->{$repo}->{on_hold};
 
-    # remove packages from list that are 'on hold'
-    exists $config->{REPOS}->{$repo}->{on_hold} && do {
-        for my $fmriPattern (@{$config->{REPOS}->{$repo}->{on_hold}}) {
-            @pkgs = grep { !/$fmriPattern/ } @pkgs;
-        }
-    };
+    # build a package list excluding packages that match an 'on hold' pattern
+    my @pkgs = ();
+    PKG: for my $pkg (@$pkgs) {
+        $pkg =~ /$_/ && next PKG for @{$config->{REPOS}->{$repo}->{on_hold}};
+        push @pkgs, $pkg;
+    }
 
     return \@pkgs;
 }
