@@ -163,6 +163,24 @@ sub getSourceDestRepos {
     return ($srcRepo, $dstRepo);
 }
 
+sub filterOnHold {
+    my $self   = shift;
+    my $config = shift;
+    my $repo   = shift;
+    my $pkgs   = shift;
+
+    my @pkgs = @$pkgs;
+
+    # remove packages from list that are 'on hold'
+    exists $config->{REPOS}->{$repo}->{on_hold} && do {
+        for my $fmriPattern (@{$config->{REPOS}->{$repo}->{on_hold}}) {
+            @pkgs = grep { !/$fmriPattern/ } @pkgs;
+        }
+    };
+
+    return \@pkgs;
+}
+
 sub publishPackages {
     my $self   = shift;
     my $config = shift;

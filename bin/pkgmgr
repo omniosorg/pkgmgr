@@ -26,9 +26,9 @@ sub listPackages {
 }
 
 sub printPackages {
-    my $packages = shift;
+    my $pkgList = shift;
     
-    print join ("\n", map { $_->{'pkg.fmri'} } @$packages) . (@$packages ? "\n" : '');
+    print join ("\n", @$pkgList) . (@$pkgList ? "\n" : '');
 }
 
 sub processPackages {
@@ -48,7 +48,7 @@ sub processPackages {
         && (!$pkgMgr->hasStaging($config, $repo) || $opts->{staging}) && do {
         
         print "Signing the following packages in source repository:\n\n";
-        printPackages($packages);
+        printPackages($pkgList);
         
         askContinue() if !$opts->{y};
         
@@ -57,9 +57,12 @@ sub processPackages {
     
     my ($srcRepo, $dstRepo) = $pkgMgr->getSourceDestRepos($config, $repo, $opts);
     
+    # remove packages that are 'on hold'
+    $pkgList = $pkgMgr->filterOnHold($config, $repo, $pkgList) if !$opts->{pull};
+
     print '' . ($opts->{pull} ? 'Pulling' : 'Publishing')
         . " the following packages from '$srcRepo' to '$dstRepo':\n\n";
-    printPackages($packages);
+    printPackages($pkgList);
     
     askContinue() if !$opts->{y};
     
@@ -89,7 +92,7 @@ sub main {
             my $opts = {};
             GetOptions($opts, qw(t|time=s src dst staging)) or exit 1;
 
-            printPackages(listPackages($config, $repo, $opts));
+            printPackages([ map { $_->{'pkg.fmri'} } @{listPackages($config, $repo, $opts)} ]);
 
             last;
         };
@@ -134,7 +137,7 @@ sub main {
             my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
 
             print "Removing the following packages from source repository:\n\n";
-            printPackages($packages);
+            printPackages($pkgList);
 
             askContinue() if !$opts->{y};
 
