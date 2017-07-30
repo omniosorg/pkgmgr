@@ -142,7 +142,7 @@ sub signPackages {
     }
 }
 
-sub getSourceDestRepos {
+sub getSrcDstRepos {
     my $self   = shift;
     my $config = shift;
     my $repo   = shift;
@@ -188,7 +188,7 @@ sub publishPackages {
     my $opts   = shift;
     my $pkgs   = shift;
 
-    my ($srcRepo, $dstRepo) = $self->getSourceDestRepos($config, $repo, $opts);
+    my ($srcRepo, $dstRepo) = $self->getSrcDstRepos($config, $repo, $opts);
 
     my @cert = $opts->{pull} ? ()
         : ('--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile});

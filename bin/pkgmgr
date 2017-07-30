@@ -55,7 +55,7 @@ sub processPackages {
         $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
     };
     
-    my ($srcRepo, $dstRepo) = $pkgMgr->getSourceDestRepos($config, $repo, $opts);
+    my ($srcRepo, $dstRepo) = $pkgMgr->getSrcDstRepos($config, $repo, $opts);
     
     # remove packages that are 'on hold'
     $pkgList = $pkgMgr->filterOnHold($config, $repo, $pkgList) if !$opts->{pull};
