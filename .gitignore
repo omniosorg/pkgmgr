@@ -4,7 +4,7 @@ Makefile
 *.rej
 *.orig
 *.tar.gz
-etc/pkgmgr.cfg
+etc/pkgmgr.conf
 aclocal.m4
 autom4te.cache
 config.log
