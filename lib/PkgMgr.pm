@@ -147,6 +147,9 @@ sub getSrcDstRepos {
     my $repo   = shift;
     my $opts   = shift;
 
+    return ($getRepoPath->($config, $repo, $opts), $opts->{d})
+        if $opts->{export};
+
     my $srcRepo = $getRepoPath->($config, $repo,
                   $opts->{pull}                                          ? { dst => 1 }
                 : $self->hasStaging($config, $repo) && !$opts->{staging} ? { staging => 1 }
@@ -190,11 +193,11 @@ sub publishPackages {
 
     my ($srcRepo, $dstRepo) = $self->getSrcDstRepos($config, $repo, $opts);
 
-    my @cert = $opts->{pull} ? ()
+    my @cert = $opts->{pull} || $opts->{export} ? ()
         : ('--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile});
 
-    my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), '-s', $srcRepo, '-d', $dstRepo,
-        @cert, qw(-m latest), @$pkgs);
+    my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), ($opts->{export} ? '-a' : ()),
+        '-s', $srcRepo, '-d', $dstRepo, @cert, qw(-m latest), @$pkgs);
 
     system (@cmd) && die 'ERROR: ' . ($opts->{pull} ? 'pulling' : 'publishing') . " packages: $!\n";
 }

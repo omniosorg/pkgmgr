@@ -37,15 +37,17 @@ sub processPackages {
     my $opts    = shift;
 
     my $packages = listPackages($config, $repo,
-          $opts->{pull}                                            ? { dst => 1 }
-        : !$opts->{staging} && $pkgMgr->hasStaging($config, $repo) ? { staging => 1 }
+          $opts->{pull} || ($opts->{export} && $opts->{dst})         ? { dst => 1 }
+        : (!$opts->{staging} && $pkgMgr->hasStaging($config, $repo))
+            || ($opts->{export} && $opts->{staging})                 ? { staging => 1 }
         : { src => 1 }
     );
 
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
     
     $pkgMgr->needsSigning($config, $repo) && !$opts->{pull}
-        && (!$pkgMgr->hasStaging($config, $repo) || $opts->{staging}) && do {
+        && (!$pkgMgr->hasStaging($config, $repo) || $opts->{staging})
+        && !($opts->{export} && ($opts->{staging} || $opts->{dst})) && do {
         
         print "Signing the following packages in source repository:\n\n";
         printPackages($pkgList);
@@ -126,6 +128,19 @@ sub main {
 
             last;
         };
+        /^export$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig($repo);
+
+            my $opts = {};
+            GetOptions($opts, qw(d=s y n src dst staging)) or exit 1;
+            $opts->{export} = 1;
+            $opts->{d} or die "ERROR: option '-d <path>' is mandatory for export.\n";
+
+            processPackages($config, $repo, $opts);
+
+            last;
+        };
         /^remove$/ && do {
             my $repo   = shift @ARGV or pod2usage(1);
             my $config = $pkgConfig->loadConfig($repo);
@@ -189,6 +204,8 @@ where 'command' is one of the following:
     
     pull <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
+    export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
+
     remove <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
     rebuild <repo> [--src|dst|staging]
@@ -225,6 +242,13 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 =head2 B<pull>
 
 pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
+Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+
+=head2 B<export>
+
+exports the packages that match B<pkg_fmri_pattern>, publisher and release
+to a pkg archive at the location specified by B<-d>. Use the B<--src|dst|staging>
+option to specify from which repository to export. Defaults to B<--src> if not defined.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 =head2 B<remove>
