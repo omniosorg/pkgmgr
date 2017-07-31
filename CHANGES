@@ -1,3 +1,51 @@
+commit 751179d874d6c8294e79a24a591242b60c156e33
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Jul 31 16:52:50 2017 +0200
+
+    export option added
+
+commit 50b661b6774c7b1f815200ec1ecdbb44ec3833b1
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 16:26:11 2017 +0200
+
+    fix .gitignore
+
+commit 2d659886c9ca003df87e06e54915f1cb0e26e6cb
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 15:57:27 2017 +0200
+
+    better on hold filtering
+
+commit af0727936c967f29e8dc047b80126f6b81713050
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 15:04:13 2017 +0200
+
+    add 'on_hold' example to config template
+
+commit ad61f5c3727c5737b5873ab09d27d02f5f1fe73c
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 14:37:24 2017 +0200
+
+    consistent naming
+
+commit 83fe8a933881daf924e283e49d5e3887830584b5
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 14:24:25 2017 +0200
+
+    fix typo in README.md
+
+commit cf092d238d79f7e3d0454e91d16100d9d40679f7
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 14:18:16 2017 +0200
+
+    using JSON::PP core module
+
+commit e6269535ae6cc533aee3844b0555fef31ed655ae
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sun Jul 30 14:08:14 2017 +0200
+
+    ready for 0.1.5
+
 commit 54c2e70c180916538e634f135d311bbb8aee6a38
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Sun Jul 30 13:59:18 2017 +0200

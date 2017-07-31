@@ -3,9 +3,9 @@ pkgmgr
 
 [![Build Status](https://travis-ci.org/hadfl/pkgmgr.svg?branch=master)](https://travis-ci.org/hadfl/pkgmgr)
 
-Version: 0.1.5
+Version: 0.1.6
 
-Date: 2017-07-30
+Date: 2017-07-31
 
 pkgmgr is an IPS package management and publishing tool.
 

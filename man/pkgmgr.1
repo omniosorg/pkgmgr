@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-07-30" "0.1.5" "pkgmgr"
+.TH PKGMGR 1 "2017-07-31" "0.1.6" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -154,6 +154,8 @@ where 'command' is one of the following:
 \&    publish <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
 \&    pull <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
+\&
+\&    export <repo> \-d <path> [\-y] [\-n] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
 \&    remove <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&
@@ -187,6 +189,12 @@ Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
 .SS "\fBpull\fP"
 .IX Subsection "pull"
 pulls the packages that match \fBpkg_fmri_pattern\fR, publisher and release.
+Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
+.SS "\fBexport\fP"
+.IX Subsection "export"
+exports the packages that match \fBpkg_fmri_pattern\fR, publisher and release
+to a pkg archive at the location specified by \fB\-d\fR. Use the \fB\-\-src|dst|staging\fR
+option to specify from which repository to export. Defaults to \fB\-\-src\fR if not defined.
 Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
 .SS "\fBremove\fP"
 .IX Subsection "remove"
