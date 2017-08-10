@@ -37,17 +37,18 @@ sub processPackages {
     my $opts    = shift;
 
     my $packages = listPackages($config, $repo,
-          $opts->{pull} || ($opts->{export} && $opts->{dst})         ? { dst => 1 }
-        : (!$opts->{staging} && $pkgMgr->hasStaging($config, $repo))
-            || ($opts->{export} && $opts->{staging})                 ? { staging => 1 }
+          $opts->{pull} || ($opts->{export} && $opts->{dst}) ? { dst => 1 }
+        : (!$opts->{staging} && !$opts->{export}
+            && $pkgMgr->hasStaging($config, $repo))
+            || ($opts->{export} && $opts->{staging})         ? { staging => 1 }
         : { src => 1 }
     );
 
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
     
     $pkgMgr->needsSigning($config, $repo) && !$opts->{pull}
-        && (!$pkgMgr->hasStaging($config, $repo) || $opts->{staging})
-        && !($opts->{export} && ($opts->{staging} || $opts->{dst})) && do {
+        && (($pkgMgr->hasStaging($config, $repo) && $opts->{staging} && !$opts->{export})
+        || ($opts->{export} && !($opts->{staging} || $opts->{dst}))) && do {
         
         print "Signing the following packages in source repository:\n\n";
         printPackages($pkgList);
