@@ -1,3 +1,15 @@
+commit 6be874a46ace701692eb8f3be8620ee2d1477285
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Aug 10 21:17:59 2017 +0200
+
+    fix listing and signing logic
+
+commit d646e7699b89f32025b613bbc057604c49324e97
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Jul 31 17:38:05 2017 +0200
+
+    ready for 0.1.6
+
 commit 751179d874d6c8294e79a24a591242b60c156e33
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Mon Jul 31 16:52:50 2017 +0200
