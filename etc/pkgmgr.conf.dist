@@ -1,7 +1,9 @@
 {
     "GENERAL" : {
-        "certFile" : "<path>",
-        "keyFile"  : "<path>"
+        "certFile"        : "<path>",
+        "keyFile"         : "<path>",
+        "connectTimeout"  : "60",
+        "lowSpeedTimeout" : "30"
     },
     "REPOS" : {
         "r151022" : {
