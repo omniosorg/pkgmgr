@@ -19,15 +19,30 @@ my $SCHEMA = sub {
     GENERAL => {
         optional => 1,
         members  => {
-            certFile => {
+            certFile       => {
                 description => 'path to certificate file',
                 example     => '/omniosorg/ssl/certs/ooce_cert.pem',
                 validator   => $sv->file('<', 'Cannot open file'),
             },              
-            keyFile => {
+            keyFile        => {
                 description => 'path to certificate key file',
                 example     => '/omniosorg/ssl/private/ooce_key.pem',
                 validator   => $sv->file('<', 'Cannot open file'),
+            },
+            connectTimeout => {
+                optional    => 1,
+                description => 'Seconds to wait trying to connect during transport operations.',
+                example     => 60,
+                default     => 60,
+                validator   => $sv->regexp(qr/^\d+$/, 'not a number'),
+            },
+            lowSpeedTimeout => {
+                optional    => 1,
+                description => 'Seconds below the lowspeed limit (1024 bytes/second) during '
+                             . 'transport operations before the client aborts the operation.',
+                example     => 30,
+                default     => 30,
+                validator   => $sv->regexp(qr/^\d+$/, 'not a number'),
             },
         },
     },

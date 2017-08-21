@@ -196,6 +196,10 @@ sub publishPackages {
     my @cert = $opts->{pull} || $opts->{export} ? ()
         : ('--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile});
 
+    # set timeout env variables
+    $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connectTimeout};
+    $ENV{PKG_CLIENT_LOWSPEED_TIMEOUT} = $config->{GENERAL}->{lowSpeedTimeout};
+
     my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), ($opts->{export} ? '-a' : ()),
         '-s', $srcRepo, '-d', $dstRepo, @cert, qw(-m latest), @$pkgs);
 
