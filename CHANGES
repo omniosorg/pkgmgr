@@ -1,3 +1,16 @@
+commit 672e65091692df48ecc1873723d6ba2bd788c0f1
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Aug 21 17:01:21 2017 +0200
+
+    adding pkg timeout env variables
+    remove honours on_hold packages
+
+commit d73db94ded17e2d67ef9aae065ab35318422a8dc
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Aug 10 21:29:42 2017 +0200
+
+    ready for 0.1.7
+
 commit 6be874a46ace701692eb8f3be8620ee2d1477285
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Thu Aug 10 21:17:59 2017 +0200
