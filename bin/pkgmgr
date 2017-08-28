@@ -106,14 +106,15 @@ sub main {
                     printf("%-40s   %s%s%s %8d  %10s  %10s\n",
                         $p->{name},
                         $p->{signed} ? 's' : ' ',
-                        defined($p->{'pkg.obsolete'}) ? 'o' : ' ',
-                        defined($p->{'pkg.renamed'}) ? 'r' : ' ',
+                        defined $p->{'pkg.obsolete'} ? 'o' : ' ',
+                        defined $p->{'pkg.renamed'}  ? 'r' : ' ',
                         $p->{files},
                         $pkgUtils->prettySize($p->{size}),
                         $pkgUtils->prettySize($p->{csize})
                     );
                 }
-            } else {
+            }
+            else {
                 printPackages([ map { $_->{'pkg.fmri'} } @$packages ]);
             }
 
@@ -327,6 +328,7 @@ this program. If not, see L<http://www.gnu.org/licenses/>.
 
 =head1 AUTHOR
 
+S<Andy Fiddaman E<lt>omnios@citrus-it.co.ukE<gt>>
 S<Dominik Hassler E<lt>hadfl@omniosce.orgE<gt>>
 
 =head1 HISTORY

@@ -125,23 +125,23 @@ sub fetchPackages {
 
     if ($opts->{long}) {
         for my $p (@$packages) {
-            for my $f (qw(size csize files)) {
-                $p->{$f} = 0;
-            }
+            $p->{$_}     = 0 for qw(size csize files);
             $p->{signed} = $self->isSigned($repoPath, $p->{'pkg.fmri'});
 
             my @cmd = ($PKG, qw(contents -H -g), $repoPath,
-                "-o", "value,pkg.size,pkg.csize", $p->{'pkg.fmri'});
+                '-o', 'value,pkg.size,pkg.csize', $p->{'pkg.fmri'});
+
             open my $pkg, '-|', @cmd
                 or die "ERROR: executing '$PKG'.\n";
-            map {
-                if (/^\s*(\d+)\s+(\d+)$/) {
-                    $p->{files}++;
-                    $p->{size} += $1;
-                    $p->{csize} += $2;
-                }
-            } <$pkg>;
-            close($pkg);
+
+            while (<$pkg>) {
+                my ($size, $csize) = /^\s*(\d+)\s+(\d+)/ or next;
+
+                $p->{files}++;
+                $p->{size}  += $size;
+                $p->{csize} += $csize;
+            }
+            close $pkg;
         }
     }
 
