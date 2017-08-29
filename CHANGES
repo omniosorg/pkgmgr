@@ -1,3 +1,27 @@
+commit 337586cae6add20777d519e5848c1804b3b45f02
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Aug 29 14:04:45 2017 +0200
+
+    move repo to omniosce
+
+commit 0125f2e580521b9c2f51f8f2981b4b43e7064cc1
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Aug 28 17:53:57 2017 +0200
+
+    long option cleanup
+
+commit 45f918eb091c25314c18b07d633e1d7b27657ec2
+Author: citrus-it <omnios@citrus-it.co.uk>
+Date:   Thu Aug 24 22:29:32 2017 +0000
+
+    Add -l|long option to list command
+
+commit 10e2ba78ad5dafc5dae65f094545b4af21be6ebd
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Aug 21 17:17:18 2017 +0200
+
+    ready for 0.1.8
+
 commit 672e65091692df48ecc1873723d6ba2bd788c0f1
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Mon Aug 21 17:01:21 2017 +0200
