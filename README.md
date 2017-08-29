@@ -1,7 +1,7 @@
 pkgmgr
 =========
 
-[![Build Status](https://travis-ci.org/hadfl/pkgmgr.svg?branch=master)](https://travis-ci.org/hadfl/pkgmgr)
+[![Build Status](https://travis-ci.org/omniosce/pkgmgr.svg?branch=master)](https://travis-ci.org/omniosce/pkgmgr)
 
 Version: 0.1.8
 
@@ -12,10 +12,10 @@ pkgmgr is an IPS package management and publishing tool.
 Setup
 -----
 
-To build `pkgmgr` you require the perl and gcc packages on your
+To build `pkgmgr` you require perl and gcc packages on your
 system.
 
-Get a copy of `pkgmgr` from https://github.com/hadfl/pkgmgr/releases
+Get a copy of `pkgmgr` from https://github.com/omniosce/pkgmgr/releases
 and unpack it into your scratch directory and cd there.
 
     ./configure --prefix=$HOME/opt/pkgmgr
