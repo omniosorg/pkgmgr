@@ -65,17 +65,6 @@ my $getReleasePublisher = sub {
     return ($config->{REPOS}->{$repo}->{release}, $config->{REPOS}->{$repo}->{publisher});
 };
 
-my $isSigned = sub {
-    my $repoPath = shift;
-    my $fmri     = shift;
-
-    my @cmd = ($PKG, qw(contents -g), $repoPath, '-m', $fmri);
-
-    open my $pkg, '-|', @cmd or die "ERROR: executing '$PKG'.\n";
-
-    return grep { /^signature/ } (<$pkg>);
-};
-
 # constructor
 sub new {
     my $class = shift;
@@ -100,6 +89,18 @@ sub needsSigning {
     return $config->{REPOS}->{$repo}->{signing} eq 'yes';
 }
 
+sub isSigned {
+    my $self     = shift;
+    my $repoPath = shift;
+    my $fmri     = shift;
+
+    my @cmd = ($PKG, qw(contents -g), $repoPath, '-m', $fmri);
+
+    open my $pkg, '-|', @cmd or die "ERROR: executing '$PKG'.\n";
+
+    return grep { /^signature/ } (<$pkg>);
+}
+
 sub fetchPackages {
     my $self   = shift;
     my $config = shift;
@@ -116,10 +117,35 @@ sub fetchPackages {
     open my $cmd, '-|', @cmd or die "ERROR: executing '$PKGREPO': $!\n";
 
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
-    return [ grep { $_->{branch} eq "0.$release"
+
+    my $packages = [ grep { $_->{branch} eq "0.$release"
         && $extractPublisher->($_) eq $publisher
         && $getEpoch->($_->{timestamp}) > $epoch }
         @{JSON::PP->new->decode(<$cmd>)} ];
+
+    if ($opts->{long}) {
+        for my $p (@$packages) {
+            $p->{$_}     = 0 for qw(size csize files);
+            $p->{signed} = $self->isSigned($repoPath, $p->{'pkg.fmri'});
+
+            my @cmd = ($PKG, qw(contents -H -g), $repoPath,
+                '-o', 'value,pkg.size,pkg.csize', $p->{'pkg.fmri'});
+
+            open my $pkg, '-|', @cmd
+                or die "ERROR: executing '$PKG'.\n";
+
+            while (<$pkg>) {
+                my ($size, $csize) = /^\s*(\d+)\s+(\d+)/ or next;
+
+                $p->{files}++;
+                $p->{size}  += $size;
+                $p->{csize} += $csize;
+            }
+            close $pkg;
+        }
+    }
+
+    return $packages;
 }
 
 sub signPackages {
@@ -132,7 +158,7 @@ sub signPackages {
     my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
 
     for my $fmri (@$pkgs) {
-        next if $isSigned->($repoPath, $fmri);
+        next if $self->isSigned($repoPath, $fmri);
 
         my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{certFile}, '-k', $config->{GENERAL}->{keyFile},
             ($opts->{n} ? '-n' : ()), '-s', $repoPath, $fmri);

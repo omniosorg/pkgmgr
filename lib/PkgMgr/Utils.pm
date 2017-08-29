@@ -57,4 +57,18 @@ sub getSTDIN {
     return $self->isaTTY() ? [] : [ split /[\s\n]+/, do { local $/; <STDIN>; } ];
 }
 
+sub prettySize {
+    my $self = shift;
+    my $size = shift;
+
+    my @units = qw/bytes KiB MiB GiB TiB/;
+    my $i;
+
+    for ($i = 0; $size > 1023; $i++) {
+        $size /= 1024.0;
+    }
+
+    return sprintf("%.2f %s", $size, $units[$i]);
+}
+
 1;

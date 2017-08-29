@@ -96,9 +96,27 @@ sub main {
             my $config = $pkgConfig->loadConfig($repo);
 
             my $opts = {};
-            GetOptions($opts, qw(t|time=s src dst staging)) or exit 1;
+            GetOptions($opts, qw(t|time=s long|l src dst staging)) or exit 1;
 
-            printPackages([ map { $_->{'pkg.fmri'} } @{listPackages($config, $repo, $opts)} ]);
+            my $packages = listPackages($config, $repo, $opts);
+            if ($opts->{long}) {
+                printf("%-40s %-5s %8s  %10s  %10s\n",
+                    qw/PKG FLAGS FILES SIZE COMP/);
+                for my $p (@$packages) {
+                    printf("%-40s   %s%s%s %8d  %10s  %10s\n",
+                        $p->{name},
+                        $p->{signed} ? 's' : ' ',
+                        defined $p->{'pkg.obsolete'} ? 'o' : ' ',
+                        defined $p->{'pkg.renamed'}  ? 'r' : ' ',
+                        $p->{files},
+                        $pkgUtils->prettySize($p->{size}),
+                        $pkgUtils->prettySize($p->{csize})
+                    );
+                }
+            }
+            else {
+                printPackages([ map { $_->{'pkg.fmri'} } @$packages ]);
+            }
 
             last;
         };
@@ -310,6 +328,7 @@ this program. If not, see L<http://www.gnu.org/licenses/>.
 
 =head1 AUTHOR
 
+S<Andy Fiddaman E<lt>omnios@citrus-it.co.ukE<gt>>
 S<Dominik Hassler E<lt>hadfl@omniosce.orgE<gt>>
 
 =head1 HISTORY
