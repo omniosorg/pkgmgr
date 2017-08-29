@@ -1,7 +1,7 @@
 pkgmgr
 =========
 
-[![Build Status](https://travis-ci.org/omniosce/pkgmgr.svg?branch=master)](https://travis-ci.org/omniosce/pkgmgr)
+[![Build Status](https://travis-ci.org/omniosorg/pkgmgr.svg?branch=master)](https://travis-ci.org/omniosorg/pkgmgr)
 
 Version: 0.1.9
 
@@ -15,7 +15,7 @@ Setup
 To build `pkgmgr` you require perl and gcc packages on your
 system.
 
-Get a copy of `pkgmgr` from https://github.com/omniosce/pkgmgr/releases
+Get a copy of `pkgmgr` from https://github.com/omniosorg/pkgmgr/releases
 and unpack it into your scratch directory and cd there.
 
     ./configure --prefix=$HOME/opt/pkgmgr
