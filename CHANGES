@@ -1,3 +1,21 @@
+commit 5d5d7b3e1365ce2575bfb8a4392f25d8e14102d1
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Aug 31 15:27:27 2017 +0200
+
+    build fixes
+
+commit bb551f68adb16b852d059fc39b429bbf93d4ef2d
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Aug 29 14:26:08 2017 +0200
+
+    org not ce
+
+commit 69656871ff90ded6798d87cf2aa9f54261ccb62e
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Aug 29 14:17:22 2017 +0200
+
+    ready for 0.1.9
+
 commit 337586cae6add20777d519e5848c1804b3b45f02
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Tue Aug 29 14:04:45 2017 +0200
