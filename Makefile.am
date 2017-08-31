@@ -44,7 +44,7 @@ install-exec-hook:
 	[ "$(PERL5LIB)" == "" ] || cd "$(DESTDIR)$(exec_prefix)" && $(PERL) -i -p -e 's{.*# PERL5LIB}{use lib qw($(PERL5LIB)); # PERL5LIB}' $(BIN) || true
 	cd "$(DESTDIR)$(exec_prefix)" && $(PERL) -i -p -e 's{.*# LIBDIR}{use lib qw($(libdir)); # LIBDIR}' $(BIN)
 	cd "$(DESTDIR)$(exec_prefix)" && $(PERL) -i -p -e 's{^#!.*perl.*}{#!$(PERL)};' $(BIN)
-	cd "$(libdir)/PkgMgr" && $(PERL) -i -p -e 's{^my .*#CONFFILE}{my \$$CONFILE = "$(sysconfdir)/$(SCRIPT_NAME).conf"; #CONFFILE)};' Config.pm
+	cd "$(DESTDIR)$(libdir)/PkgMgr" && $(PERL) -i -p -e 's{^my .*# CONFFILE}{my \$$CONFILE = "$(sysconfdir)/$(SCRIPT_NAME).conf"; # CONFFILE};' Config.pm
 	[ ! -d $(THIRDPARTY_DIR)/lib/perl5 ] || cp -fr $(THIRDPARTY_DIR)/lib/perl5/* $(DESTDIR)$(libdir)
 
 #test:
