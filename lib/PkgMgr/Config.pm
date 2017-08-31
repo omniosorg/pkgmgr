@@ -10,7 +10,7 @@ use PkgMgr::Utils;
 use Data::Processor;
 
 # constants
-my $CONFILE = "$FindBin::RealBin/../etc/" . basename($0) . '.conf';
+my $CONFILE = "$FindBin::RealBin/../etc/" . basename($0) . '.conf'; # CONFFILE
 
 my $SCHEMA = sub {
     my $sv = PkgMgr::Utils->new();
