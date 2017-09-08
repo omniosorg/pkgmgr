@@ -1,3 +1,5 @@
+<img src="http://www.omniosce.org/OmniOSce_logo.svg" height="128">
+
 pkgmgr
 =========
 
