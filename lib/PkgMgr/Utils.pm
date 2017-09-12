@@ -14,6 +14,11 @@ sub new {
 }
 
 # public methods
+sub getNameVersion {
+    my $self = shift;
+    return (shift =~ /\/([^\/]+)\@([^,]+),5\.11-0\.1510/);
+}
+
 sub file {
     my $self = shift;
     my $op   = shift;
