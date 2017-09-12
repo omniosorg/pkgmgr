@@ -10,6 +10,8 @@ where 'command' is one of the following:
 
     list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
     
+    diff <ref_repo> <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
+
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
@@ -40,6 +42,12 @@ repository to list. Defaults to B<--src> if not defined.
 If the B<-t> option is used, only packages that have a more recent ISO timestamp will
 be listed or a timestamp within B<interval> timespan. B<interval> can be suffixed
 with s, M, h, d, m, y (defaults to seconds).
+
+=head2 B<diff>
+
+returns a diff of package versions in the repositories that match the B<pkg_fmri_pattern>,
+publisher and release. Use the B<--src|dst|staging> option to specify which
+repositories to diff. Defaults to B<--src> if not defined.
 
 =head2 B<stage>
 
@@ -79,6 +87,10 @@ repository to list. Defaults to B<--src> if not defined.
 list all packages in the staging repository of 'r151022' containing the string 'gnu'
 
     pkgmgr list r151022 --staging '*gnu*'
+
+show all packages that have changed between r151022 and bloody in the destination repos
+
+    pkgmgr diff r151022 bloody --dst
 
 stage all packages that have changed within the last 2 hours for repository 'r151022'
 

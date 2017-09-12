@@ -1,3 +1,27 @@
+commit ed7a7d2c13c9479cea9a704cc2e7cf6b7b64833d
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Sep 12 23:02:19 2017 +0200
+
+    diff option added
+
+commit fe0f8cc78e3e30fe374c954ed3a67737b26822e3
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Sep 8 23:30:24 2017 +0200
+
+    add logo to README.md
+
+commit cbc6acb1589bf68ada9cd260eeb0ae526f6acd3f
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Sep 8 01:14:23 2017 +0200
+
+    add minimal POD
+
+commit 88b0bd3d9cfad86a51d753f9bc08e44fbe33b0da
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Aug 31 15:36:25 2017 +0200
+
+    ready for 0.1.10
+
 commit 5d5d7b3e1365ce2575bfb8a4392f25d8e14102d1
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Thu Aug 31 15:27:27 2017 +0200

@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-08-31" "0.1.10" "pkgmgr"
+.TH PKGMGR 1 "2017-09-12" "0.1.11" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -149,6 +149,8 @@ where 'command' is one of the following:
 .Vb 1
 \&    list <repo> [\-t <interval>|<ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&    
+\&    diff <ref_repo> <diff_repo> [\-\-src|dst|staging] [pkg_fmri_pattern ...]
+\&
 \&    stage <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
 \&    publish <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
@@ -178,6 +180,11 @@ repository to list. Defaults to \fB\-\-src\fR if not defined.
 If the \fB\-t\fR option is used, only packages that have a more recent \s-1ISO\s0 timestamp will
 be listed or a timestamp within \fBinterval\fR timespan. \fBinterval\fR can be suffixed
 with s, M, h, d, m, y (defaults to seconds).
+.SS "\fBdiff\fP"
+.IX Subsection "diff"
+returns a diff of package versions in the repositories that match the \fBpkg_fmri_pattern\fR,
+publisher and release. Use the \fB\-\-src|dst|staging\fR option to specify which
+repositories to diff. Defaults to \fB\-\-src\fR if not defined.
 .SS "\fBstage\fP"
 .IX Subsection "stage"
 stages the packages that match the \fBpkg_fmri_pattern\fR, publisher and release.
@@ -211,6 +218,12 @@ list all packages in the staging repository of 'r151022' containing the string '
 .PP
 .Vb 1
 \&    pkgmgr list r151022 \-\-staging \*(Aq*gnu*\*(Aq
+.Ve
+.PP
+show all packages that have changed between r151022 and bloody in the destination repos
+.PP
+.Vb 1
+\&    pkgmgr diff r151022 bloody \-\-dst
 .Ve
 .PP
 stage all packages that have changed within the last 2 hours for repository 'r151022'
