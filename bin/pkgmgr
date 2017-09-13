@@ -52,25 +52,30 @@ sub buildPkgDiff {
     return [ map { "$_ $pkgDiff{$_}" } sort keys %pkgDiff ];
 }
 
+sub getSrc {
+    my $config  = shift;
+    my $repo    = shift;
+    my $mainOpt = shift;
+    my $opts    = shift;
+
+    return $mainOpt eq 'pull' || ($mainOpt eq 'export' && $opts->{dst}) ? { dst     => 1 }
+        : ($mainOpt eq 'publish' && $pkgMgr->hasStaging($config, $repo))
+            || ($mainOpt eq 'export' && $opts->{staging})               ? { staging => 1 }
+        :                                                                 { src     => 1 }
+}
+
 sub processPackages {
     my $config  = shift;
     my $repo    = shift;
+    my $mainOpt = shift;
     my $opts    = shift;
 
-    my $packages = listPackages($config, $repo,
-          $opts->{pull} || ($opts->{export} && $opts->{dst}) ? { dst => 1 }
-        : (!$opts->{staging} && !$opts->{export}
-            && $pkgMgr->hasStaging($config, $repo))
-            || ($opts->{export} && $opts->{staging})         ? { staging => 1 }
-        : { src => 1 }
-    );
+    my $src      = getSrc($config, $repo, $mainOpt, $opts);
+    my $packages = listPackages($config, $repo, $src); 
 
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
     
-    $pkgMgr->needsSigning($config, $repo) && !$opts->{pull}
-        && (($pkgMgr->hasStaging($config, $repo) && $opts->{staging} && !$opts->{export})
-        || ($opts->{export} && !($opts->{staging} || $opts->{dst}))) && do {
-        
+    $pkgMgr->needsSigning($config, $repo) && $src->{src} && do {
         print "Signing the following packages in source repository:\n";
         printPackages($pkgList);
         
@@ -159,15 +164,10 @@ sub main {
             my $opts = {};
             GetOptions($opts, qw(y n)) or exit 1;
 
-            if ($mainOpt eq 'stage') {
-                $pkgMgr->hasStaging($config, $repo)
-                    or die "ERROR: no staging repository defined for repository '$repo'.\n";
-                $opts->{staging} = 1;
-            }
+            $mainOpt eq 'stage' && !$pkgMgr->hasStaging($config, $repo)
+                and die "ERROR: no staging repository defined for repository '$repo'.\n";
 
-            $opts->{pull} = 1 if ($mainOpt eq 'pull');
-
-            processPackages($config, $repo, $opts);
+            processPackages($config, $repo, $mainOpt, $opts);
 
             last;
         };
@@ -177,10 +177,9 @@ sub main {
 
             my $opts = {};
             GetOptions($opts, qw(d=s y n src dst staging)) or exit 1;
-            $opts->{export} = 1;
             $opts->{d} or die "ERROR: option '-d <path>' is mandatory for export.\n";
 
-            processPackages($config, $repo, $opts);
+            processPackages($config, $repo, $mainOpt, $opts);
 
             last;
         };
