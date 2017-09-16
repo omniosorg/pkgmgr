@@ -1,3 +1,21 @@
+commit 2c9a0e987dfcd8d708a48cd8afecddebf5f77636
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Sep 16 17:34:08 2017 +0200
+
+    bugfix and added basic testing
+
+commit f19a084d3d3d12487bc6cb5665acd5d87fb1cd4a
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Sep 13 15:46:17 2017 +0200
+
+    fix signing check
+
+commit b534e9d5340b984105a895b7c3673e7403f94af8
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Sep 12 23:32:06 2017 +0200
+
+    ready for 0.1.11
+
 commit ed7a7d2c13c9479cea9a704cc2e7cf6b7b64833d
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Tue Sep 12 23:02:19 2017 +0200
