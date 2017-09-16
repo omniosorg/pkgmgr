@@ -167,6 +167,18 @@ sub signPackages {
     }
 }
 
+sub getSrc {
+    my $self    = shift;
+    my $config  = shift;
+    my $repo    = shift;
+    my $opts    = shift;
+
+    return $opts->{pull} || ($opts->{export} && $opts->{dst}) ? { dst     => 1 }
+        : ($opts->{publish} && $self->hasStaging($config, $repo))
+            || ($opts->{export} && $opts->{staging})          ? { staging => 1 }
+        :                                                       { src     => 1 }
+}
+
 sub getSrcDstRepos {
     my $self   = shift;
     my $config = shift;
@@ -177,16 +189,17 @@ sub getSrcDstRepos {
         if $opts->{export};
 
     my $srcRepo = $getRepoPath->($config, $repo,
-                  $opts->{pull}                                          ? { dst => 1 }
-                : $self->hasStaging($config, $repo) && !$opts->{staging} ? { staging => 1 }
-                : { src => 1 }
-                );
+                  $opts->{pull}                     ? { dst => 1     }
+                : $self->hasStaging($config, $repo)
+                    && !$opts->{stage}              ? { staging => 1 }
+                :                                     { src => 1     }
+    );
         
     my $dstRepo = $getRepoPath->($config, $repo,
-                  $opts->{pull}    ? { src => 1 } 
-                : $opts->{staging} ? { staging => 1 }
-                : { dst => 1 }
-                );
+                  $opts->{pull}  ? { src => 1     } 
+                : $opts->{stage} ? { staging => 1 }
+                :                  { dst => 1     }
+    );
 
     return ($srcRepo, $dstRepo);
 }

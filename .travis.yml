@@ -37,6 +37,6 @@ script:
   - ./configure --prefix=$HOME/pkgmgr
   - make
   - make install
-  - cd $HOME/pkgmgr/bin  
-  - ./pkgmgr version
+  - ./bin/pkgmgr version
 
+  - perl ./t/srcdstrepo.t || test $? == 1
