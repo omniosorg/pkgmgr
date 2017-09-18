@@ -189,10 +189,10 @@ sub getSrcDstRepos {
         if $opts->{export};
 
     my $srcRepo = $getRepoPath->($config, $repo,
-                  $opts->{pull}                     ? { dst => 1     }
+                  $opts->{pull}                     ? { dst     => 1 }
                 : $self->hasStaging($config, $repo)
                     && !$opts->{stage}              ? { staging => 1 }
-                :                                     { src => 1     }
+                :                                     { src     => 1 }
     );
         
     my $dstRepo = $getRepoPath->($config, $repo,
