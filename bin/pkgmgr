@@ -144,7 +144,7 @@ sub main {
 
             last;
         };
-        /^(?:stage|publish|pull)$/ && do {
+        /^(?:stage|publish)$/ && do {
             my $repo   = shift @ARGV or pod2usage(1);
             my $config = $pkgConfig->loadConfig($repo);
 
@@ -154,6 +154,35 @@ sub main {
 
             $opts->{stage} && !$pkgMgr->hasStaging($config, $repo)
                 and die "ERROR: no staging repository defined for repository '$repo'.\n";
+
+            processPackages($config, $repo, $opts);
+
+            last;
+        };
+        /^pull$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig($repo);
+
+            my $opts = {};
+            GetOptions($opts, qw(y n from=s)) or exit 1;
+            $opts->{$mainOpt} = 1;
+
+            # reference for convenience
+            my $cfg = $config->{REPOS}->{$repo};
+            $opts->{from} && do {
+                $cfg->{pull_src}->{$opts->{from}}
+                    or die "ERROR: pull source '$opts->{from}' not defined in config.\n";
+
+                print "Pulling from '$cfg->{pull_src}->{$opts->{from}}' "
+                    . "to '$cfg->{src_repo}'\n";
+
+                askContinue() if !$opts->{y};
+
+                $pkgUtils->rsync("$cfg->{pull_src}->{$opts->{from}}/",
+                    "$cfg->{src_repo}/") if !$opts->{n};
+
+                last;
+            };
 
             processPackages($config, $repo, $opts);
 
@@ -261,7 +290,7 @@ where 'command' is one of the following:
     
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
-    pull <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    pull <repo> [--from=<pull_src>] [-y] [-n] [pkg_fmri_pattern ...]
 
     export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
 
@@ -308,6 +337,8 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+If you specify B<--from=<pull_src>>, all packages will get rsynced from that
+location instead of pulled from the destination repo.
 
 =head2 B<export>
 

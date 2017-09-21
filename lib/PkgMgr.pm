@@ -26,13 +26,13 @@ my $getRepoPath = sub {
     my $opt    = shift;
     
     $opt->{staging} && do {
-        exists $config->{REPOS}->{$repo}->{stagingRepo}
+        exists $config->{REPOS}->{$repo}->{staging_repo}
             or die "ERROR: no staging repository defined in config file.\n";
         
-        return $config->{REPOS}->{$repo}->{stagingRepo};
+        return $config->{REPOS}->{$repo}->{staging_repo};
     };
     
-    return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dstRepo' : 'srcRepo'};
+    return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dst_repo' : 'src_repo'};
 };
 
 my $getEpoch = sub {
@@ -78,7 +78,7 @@ sub hasStaging {
     my $config = shift;
     my $repo   = shift;
     
-    return exists $config->{REPOS}->{$repo}->{stagingRepo};
+    return exists $config->{REPOS}->{$repo}->{staging_repo};
 }
 
 sub needsSigning {
@@ -160,7 +160,8 @@ sub signPackages {
     for my $fmri (@$pkgs) {
         next if $self->isSigned($repoPath, $fmri);
 
-        my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{certFile}, '-k', $config->{GENERAL}->{keyFile},
+        my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{cert_file},
+            '-k', $config->{GENERAL}->{key_file},
             ($opts->{n} ? '-n' : ()), '-s', $repoPath, $fmri);
 
         system (@cmd) && die "ERROR: signing package '$fmri'.\n";
@@ -233,11 +234,12 @@ sub publishPackages {
     my ($srcRepo, $dstRepo) = $self->getSrcDstRepos($config, $repo, $opts);
 
     my @cert = $opts->{pull} || $opts->{export} ? ()
-        : ('--dkey', $config->{GENERAL}->{keyFile}, '--dcert', $config->{GENERAL}->{certFile});
+        : ('--dkey',  $config->{GENERAL}->{key_file},
+           '--dcert', $config->{GENERAL}->{cert_file});
 
     # set timeout env variables
-    $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connectTimeout};
-    $ENV{PKG_CLIENT_LOWSPEED_TIMEOUT} = $config->{GENERAL}->{lowSpeedTimeout};
+    $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connect_timeout};
+    $ENV{PKG_CLIENT_LOWSPEED_TIMEOUT} = $config->{GENERAL}->{lowspeed_timeout};
 
     my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), ($opts->{export} ? '-a' : ()),
         '-s', $srcRepo, '-d', $dstRepo, @cert, qw(-m latest), @$pkgs);
@@ -268,7 +270,7 @@ sub rebuildRepo {
     my $repoPath = $getRepoPath->($config, $repo, $opts);
 
     my @cmd = ($PKGREPO, qw(rebuild -s), $repoPath, ($opts->{staging} || $opts->{dst} ? ('--key',
-        $config->{GENERAL}->{keyFile}, '--cert', $config->{GENERAL}->{certFile}) : ()));
+        $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file}) : ()));
 
     system (@cmd) && die "ERROR: rebuilding repo '$repoPath'.\n";
 }

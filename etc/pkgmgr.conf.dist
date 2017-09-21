@@ -1,40 +1,43 @@
 {
     "GENERAL" : {
-        "certFile"        : "<path>",
-        "keyFile"         : "<path>",
-        "connectTimeout"  : "60",
-        "lowSpeedTimeout" : "30"
+        "cert_file"        : "<path>",
+        "key_file"         : "<path>",
+        "connect_timeout"  : "60",
+        "lowspeed_timeout" : "30"
     },
     "REPOS" : {
         "r151022" : {
-            "signing"     : "yes",
-            "srcRepo"     : "<path/URL>",
-            "dstRepo"     : "<path/URL>",
-            "stagingRepo" : "<path/URL>",
-            "publisher"   : "omnios",
-            "release"     : "r151022",
-            "on_hold"     : [ "gnu-binutils" ]
+            "signing"      : "yes",
+            "src_repo"     : "<path/URL>",
+            "dst_repo"     : "<path/URL>",
+            "staging_repo" : "<path/URL>",
+            "publisher"    : "omnios",
+            "release"      : "r151022",
+            "on_hold"      : [ "gnu-binutils" ]
         },
         "bloody" : {
-            "signing"     : "no",
-            "srcRepo"     : "<path/URL>",
-            "dstRepo"     : "<path/URL>",
-            "publisher"   : "omnios",
-            "release"     : "r151023"
+            "pull_src"     : {
+                "host1" : "user@build-host:/build/repo"
+            },
+            "signing"      : "no",
+            "src_repo"     : "<path/URL>",
+            "dst_repo"     : "<path/URL>",
+            "publisher"    : "omnios",
+            "release"      : "r151023"
         },
         "r151022-extra" : {
-            "signing"     : "no",
-            "srcRepo"     : "<path/URL>",
-            "dstRepo"     : "<path/URL>",
-            "publisher"   : "extra.omnios",
-            "release"     : "r151022"
+            "signing"      : "no",
+            "src_repo"     : "<path/URL>",
+            "dst_repo"     : "<path/URL>",
+            "publisher"    : "extra.omnios",
+            "release"      : "r151022"
         },
         "bloody-extra" : {
-            "signing"     : "no",
-            "srcRepo"     : "<path/URL>",
-            "dstRepo"     : "<path/URL>",
-            "publisher"   : "extra.omnios",
-            "release"     : "r151023"
+            "signing"      : "no",
+            "src_repo"     : "<path/URL>",
+            "dst_repo"     : "<path/URL>",
+            "publisher"    : "extra.omnios",
+            "release"      : "r151023"
         }
     }
 }

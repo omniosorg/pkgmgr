@@ -5,6 +5,8 @@ use warnings;
 
 use POSIX qw(isatty);
 
+my @RSYNC = qw(/usr/bin/rsync -ahh --stats --delete-after);
+
 # constructor
 sub new {
     my $class = shift;
@@ -66,14 +68,18 @@ sub prettySize {
     my $self = shift;
     my $size = shift;
 
-    my @units = qw/bytes KiB MiB GiB TiB/;
-    my $i;
+    my @units = qw(bytes KiB MiB GiB TiB);
+    my $i     = $size <= 0 ? 0 : int (log ($size) / log (1024));
 
-    for ($i = 0; $size > 1023; $i++) {
-        $size /= 1024.0;
-    }
+    return sprintf("%.2f %s", $size / 1024 ** $i, $units[$i]);
+}
 
-    return sprintf("%.2f %s", $size, $units[$i]);
+sub rsync {
+    my $self = shift;
+
+    my @cmd = (@RSYNC, shift, shift);
+
+    system (@cmd) && die "ERROR: executing 'rsync': $!\n";
 }
 
 1;
