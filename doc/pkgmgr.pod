@@ -16,7 +16,7 @@ where 'command' is one of the following:
     
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
-    pull <repo> [-y] [-n] [pkg_fmri_pattern ...]
+    pull <repo> [--from=<pull_src>] [-y] [-n] [pkg_fmri_pattern ...]
 
     export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
 
@@ -63,6 +63,8 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+If you specify B<--from=<pull_src>>, all packages will get rsynced from that
+location instead of pulled from the destination repo.
 
 =head2 B<export>
 

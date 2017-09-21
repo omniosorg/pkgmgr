@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-09-16" "0.1.12" "pkgmgr"
+.TH PKGMGR 1 "2017-09-21" "0.2.0" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -155,7 +155,7 @@ where 'command' is one of the following:
 \&    
 \&    publish <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
-\&    pull <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
+\&    pull <repo> [\-\-from=<pull_src>] [\-y] [\-n] [pkg_fmri_pattern ...]
 \&
 \&    export <repo> \-d <path> [\-y] [\-n] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
@@ -197,6 +197,8 @@ Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
 .IX Subsection "pull"
 pulls the packages that match \fBpkg_fmri_pattern\fR, publisher and release.
 Use the \fB\-y\fR to say 'yes' to all questions asked, \fB\-n\fR for a dry-run.
+If you specify \fB\-\-from=<pull_src\fR>, all packages will get rsynced from that
+location instead of pulled from the destination repo.
 .SS "\fBexport\fP"
 .IX Subsection "export"
 exports the packages that match \fBpkg_fmri_pattern\fR, publisher and release

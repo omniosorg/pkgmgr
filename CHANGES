@@ -1,3 +1,21 @@
+commit df85f22ae03198850b350697f6e662d97e139100
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Sep 21 13:54:27 2017 +0200
+
+    pull from user defined sources
+
+commit e8f986a264d35bcaeaa7d68db9906e4d995eed6c
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Sep 18 23:33:22 2017 +0200
+
+    cleanup
+
+commit 875578a5372f85ba506fc43c24c6d7c8ff4f1d02
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Sep 16 17:56:05 2017 +0200
+
+    ready for 0.1.12
+
 commit 2c9a0e987dfcd8d708a48cd8afecddebf5f77636
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Sat Sep 16 17:34:08 2017 +0200
