@@ -12,13 +12,13 @@ use Test::More;
 my $config = {
     REPOS   => {
         no_stage => {
-            srcRepo     => 'src',
-            dstRepo     => 'dst',
+            src_repo     => 'src',
+            dst_repo     => 'dst',
         },
         stage    => {
-            srcRepo     => 'src',
-            stagingRepo => 'staging',
-            dstRepo     => 'dst',
+            src_repo     => 'src',
+            staging_repo => 'staging',
+            dst_repo     => 'dst',
         },
     }
 };

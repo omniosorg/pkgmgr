@@ -19,30 +19,30 @@ my $SCHEMA = sub {
     GENERAL => {
         optional => 1,
         members  => {
-            certFile       => {
-                description => 'path to certificate file',
-                example     => '/omniosorg/ssl/certs/ooce_cert.pem',
-                validator   => $sv->file('<', 'Cannot open file'),
+            cert_file        => {
+                description  => 'path to certificate file',
+                example      => '"cert_file" : "/omniosorg/ssl/certs/ooce_cert.pem"',
+                validator    => $sv->file('<', 'Cannot open file'),
             },              
-            keyFile        => {
-                description => 'path to certificate key file',
-                example     => '/omniosorg/ssl/private/ooce_key.pem',
-                validator   => $sv->file('<', 'Cannot open file'),
+            key_file         => {
+                description  => 'path to certificate key file',
+                example      => '"key_file" : "/omniosorg/ssl/private/ooce_key.pem"',
+                validator    => $sv->file('<', 'Cannot open file'),
             },
-            connectTimeout => {
-                optional    => 1,
-                description => 'Seconds to wait trying to connect during transport operations.',
-                example     => 60,
-                default     => 60,
-                validator   => $sv->regexp(qr/^\d+$/, 'not a number'),
+            connect_timeout  => {
+                optional     => 1,
+                description  => 'Seconds to wait trying to connect during transport operations.',
+                example      => '"connect_timeout" : "60"',
+                default      => 60,
+                validator    => $sv->regexp(qr/^\d+$/, 'not a number'),
             },
-            lowSpeedTimeout => {
-                optional    => 1,
-                description => 'Seconds below the lowspeed limit (1024 bytes/second) during '
-                             . 'transport operations before the client aborts the operation.',
-                example     => 30,
-                default     => 30,
-                validator   => $sv->regexp(qr/^\d+$/, 'not a number'),
+            lowspeed_timeout => {
+                optional     => 1,
+                description  => 'Seconds below the lowspeed limit (1024 bytes/second) during '
+                              . 'transport operations before the client aborts the operation.',
+                example      => '"lowspeed_timeout" : "30"',
+                default      => 30,
+                validator    => $sv->regexp(qr/^\d+$/, 'not a number'),
             },
         },
     },
@@ -56,32 +56,32 @@ my $SCHEMA = sub {
                         example     => '"signing" : "yes"',
                         validator   => $sv->elemOf(qw(yes no)),
                     },
-                    srcRepo     => {
+                    src_repo     => {
                         description => 'source (local) repository',
-                        example     => '"srcRepo" : "/omniosorg/_r22_repo"',
+                        example     => '"src_repo" : "/omniosorg/_r22_repo"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },     
-                    dstRepo     => {
+                    dst_repo     => {
                         description => 'destination (remote) repository',
-                        example     => '"dstRepo" : "https://pkg.omniosce.org/r151022/core"',
+                        example     => '"dst_repo" : "https://pkg.omniosce.org/r151022/core"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
-                    stagingRepo => {
+                    staging_repo => {
                         optional    => 1,
                         description => 'staging repository',
-                        example     => '"stagingRepo" : "https://pkg.omniosce.org/r151022/staging"',
+                        example     => '"staging_repo" : "https://pkg.omniosce.org/r151022/staging"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
                     publisher   => {
                         description => 'publisher name',
                         example     => '"publisher" : "omnios"',
-                        validator   => $sv->regexp(qw/^[\w.]+$/, 'not a valid publisher name'),
+                        validator   => $sv->regexp(qr/^[\w.]+$/, 'not a valid publisher name'),
                     },
                     release     => {
                         description => 'release',
                         example     => '"release" : "r151022"',
                         transformer => sub { return (shift =~ /^r?(.*)$/)[0]; }, # remove leading 'r' if given
-                        validator   => $sv->regexp(qw/^1510\d{2}$/, 'not a valid release'),
+                        validator   => $sv->regexp(qr/^1510\d{2}$/, 'not a valid release'),
                     },
                     on_hold     => {
                         optional    => 1,
@@ -89,6 +89,17 @@ my $SCHEMA = sub {
                         description => 'list of FMRI patterns (regexp) not to stage or publish',
                         example     => '"on_hold" : [ "binutils", "cherrypy" ]',
                         validator   => sub { return undef },
+                    },
+                    pull_src    => {
+                        optional    => 1,
+                        members     => {
+                            '\S+'   => {
+                                regex       => 1,
+                                description => 'pull source',
+                                example     => '"host1" : "user@build-host:/build/repo"',
+                                validator   => $sv->regexp(qr/^.*$/, 'expected a string'),
+                            },
+                        },
                     },
                 },
             },
