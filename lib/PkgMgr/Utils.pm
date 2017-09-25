@@ -18,7 +18,7 @@ sub new {
 # public methods
 sub getNameVersion {
     my $self = shift;
-    return (shift =~ /\/([^\/]+)\@([^,]+),5\.11-0\.1510/);
+    return (shift =~ /^pkg:\/\/[^\/]+\/([^@]+)\@([^,]+),5\.11-0\.1510/);
 }
 
 sub file {
