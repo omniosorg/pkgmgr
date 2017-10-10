@@ -26,7 +26,7 @@
             "release"      : "r151023"
         },
         "r151022-extra" : {
-            "signing"      : "no",
+            "signing"      : "yes",
             "src_repo"     : "<path/URL>",
             "dst_repo"     : "<path/URL>",
             "publisher"    : "extra.omnios",
