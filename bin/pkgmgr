@@ -38,18 +38,32 @@ sub buildPkgDiff {
     my %pkgDiff;
     for my $pkg (keys %{$pkgList->{ref}}) {
         if (exists $pkgList->{diff}->{$pkg}) {
-            $pkgDiff{$pkg} = "$pkgList->{ref}->{$pkg} -> $pkgList->{diff}->{$pkg} [*]"
-                if $pkgList->{ref}->{$pkg} ne $pkgList->{diff}->{$pkg};
+            $pkgDiff{$pkg} = {
+                    txt => "$pkgList->{ref}->{$pkg} | $pkgList->{diff}->{$pkg}",
+                    fmt => "",
+                } if $pkgList->{ref}->{$pkg} ne $pkgList->{diff}->{$pkg};
 
             delete $pkgList->{diff}->{$pkg};
         }
         else {
-            $pkgDiff{$pkg} = "$pkgList->{ref}->{$pkg} [-]";
+            $pkgDiff{$pkg} = {
+                txt => "$pkgList->{ref}->{$pkg} | _Removed_",
+                fmt => "~~",
+            };
         }
     }
-    $pkgDiff{$_} = "$pkgList->{diff}->{$_} [+]" for keys %{$pkgList->{diff}};
+    $pkgDiff{$_} = {
+            txt => "_New_ | $pkgList->{diff}->{$_}",
+            fmt => "**",
+    } for keys %{$pkgList->{diff}};
 
-    return [ map { "$_ $pkgDiff{$_}" } sort keys %pkgDiff ];
+    return [
+        "| Package | Old Version | New Version |",
+        "| :------ | :---------- | :---------- |",
+        map {
+            "| $pkgDiff{$_}->{fmt}$_$pkgDiff{$_}->{fmt} | $pkgDiff{$_}->{txt}";
+        } sort keys %pkgDiff
+    ];
 }
 
 sub processPackages {
