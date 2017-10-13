@@ -1,3 +1,27 @@
+commit 845f62f8a406b766a559e31c1ed02354f0c022e9
+Author: Andy Fiddaman <omnios@citrus-it.co.uk>
+Date:   Fri Oct 13 11:09:24 2017 +0000
+
+    Produce diffs in markdown format
+
+commit 41ec167a9237bdd5896ad56db78600ac82d3aade
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Oct 10 10:56:24 2017 +0200
+
+    fix config template to match ooce signing policy
+
+commit 007f51f811e226a0ca56e4076668ecbbaac23509
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Sep 25 17:10:06 2017 +0200
+
+    diff: show full pkg name
+
+commit 7b1daedac562153f1cb577e821cf9339e6bcb349
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Sep 21 14:59:18 2017 +0200
+
+    ready for 0.2.0
+
 commit df85f22ae03198850b350697f6e662d97e139100
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Thu Sep 21 13:54:27 2017 +0200
