@@ -157,15 +157,11 @@ sub signPackages {
 
     my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
 
-    for my $fmri (@$pkgs) {
-        next if $self->isSigned($repoPath, $fmri);
+    my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{cert_file},
+        '-k', $config->{GENERAL}->{key_file},
+        ($opts->{n} ? '-n' : ()), '-s', $repoPath, @$pkgs);
 
-        my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{cert_file},
-            '-k', $config->{GENERAL}->{key_file},
-            ($opts->{n} ? '-n' : ()), '-s', $repoPath, $fmri);
-
-        system (@cmd) && die "ERROR: signing package '$fmri'.\n";
-    }
+    system (@cmd) && die "ERROR: signing packages: $!\n";
 }
 
 sub getSrc {
