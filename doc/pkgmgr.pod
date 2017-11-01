@@ -10,7 +10,7 @@ where 'command' is one of the following:
 
     list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
     
-    diff <ref_repo> <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
+    diff <ref_repo> [--src|dst|staging] <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
 
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
     
@@ -45,9 +45,10 @@ with s, M, h, d, m, y (defaults to seconds).
 
 =head2 B<diff>
 
-returns a diff of package versions in the repositories that match the B<pkg_fmri_pattern>,
-publisher and release. Use the B<--src|dst|staging> option to specify which
-repositories to diff. Defaults to B<--src> if not defined.
+returns a diff of package versions in the repositories that match the
+B<pkg_fmri_pattern>, publisher and release.
+Use the B<--src|dst|staging> option to specify which repositories to diff.
+Defaults to B<--src> for B<ref_repo> and to B<--dst> for B<diff_repo>.
 
 =head2 B<stage>
 

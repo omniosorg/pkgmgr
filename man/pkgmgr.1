@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2017-10-13" "0.2.1" "pkgmgr"
+.TH PKGMGR 1 "2017-10-30" "0.2.2" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -149,7 +149,7 @@ where 'command' is one of the following:
 .Vb 1
 \&    list <repo> [\-t <interval>|<ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&    
-\&    diff <ref_repo> <diff_repo> [\-\-src|dst|staging] [pkg_fmri_pattern ...]
+\&    diff <ref_repo> [\-\-src|dst|staging] <diff_repo> [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
 \&    stage <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&    
@@ -182,9 +182,10 @@ be listed or a timestamp within \fBinterval\fR timespan. \fBinterval\fR can be s
 with s, M, h, d, m, y (defaults to seconds).
 .SS "\fBdiff\fP"
 .IX Subsection "diff"
-returns a diff of package versions in the repositories that match the \fBpkg_fmri_pattern\fR,
-publisher and release. Use the \fB\-\-src|dst|staging\fR option to specify which
-repositories to diff. Defaults to \fB\-\-src\fR if not defined.
+returns a diff of package versions in the repositories that match the
+\&\fBpkg_fmri_pattern\fR, publisher and release.
+Use the \fB\-\-src|dst|staging\fR option to specify which repositories to diff.
+Defaults to \fB\-\-src\fR for \fBref_repo\fR and to \fB\-\-dst\fR for \fBdiff_repo\fR.
 .SS "\fBstage\fP"
 .IX Subsection "stage"
 stages the packages that match the \fBpkg_fmri_pattern\fR, publisher and release.

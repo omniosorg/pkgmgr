@@ -1,3 +1,21 @@
+commit f002791c3b64188a4b77a3b42a92ea6dc09baaa8
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Oct 30 17:34:34 2017 +0100
+
+    sign packages in one transaction
+
+commit 3d2305fd0fb48a5b3b11fe65cfd891b2be62d0cb
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Oct 24 20:47:00 2017 +0200
+
+    diff option enhanced
+
+commit 4bf6eb740b2ecd9f49cf4119a458fb57d56150d3
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Oct 13 14:39:01 2017 +0200
+
+    ready for 0.2.1
+
 commit 845f62f8a406b766a559e31c1ed02354f0c022e9
 Author: Andy Fiddaman <omnios@citrus-it.co.uk>
 Date:   Fri Oct 13 11:09:24 2017 +0000
