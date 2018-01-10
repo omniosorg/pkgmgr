@@ -55,7 +55,7 @@ my $getOptEpoch = sub {
 };
 
 my $extractPublisher = sub {
-    return (shift->{'pkg.fmri'} =~ /^pkg:\/\/([^\/]+)/)[0];
+    return (shift->{'pkg.fmri'} =~ m|^pkg://([^/]+)|)[0];
 };
 
 my $getReleasePublisher = sub {
@@ -118,10 +118,12 @@ sub fetchPackages {
 
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
 
-    my $packages = [ grep { $_->{branch} eq "0.$release"
-        && $extractPublisher->($_) eq $publisher
-        && $getEpoch->($_->{timestamp}) > $epoch }
-        @{JSON::PP->new->decode(<$cmd>)} ];
+    my $packages = [
+        grep { $_->{branch} =~ /^\d+\.$release$/
+            && $extractPublisher->($_) eq $publisher
+            && $getEpoch->($_->{timestamp}) > $epoch
+        } @{JSON::PP->new->decode(<$cmd>)}
+    ];
 
     if ($opts->{long}) {
         for my $p (@$packages) {
@@ -277,7 +279,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
