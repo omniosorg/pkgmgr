@@ -1,3 +1,21 @@
+commit 8251ea054b882def1517f97fa01b97fc989abad4
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Jan 10 12:31:45 2018 +0100
+
+    support dash-revisions
+
+commit 7dc115cde2da8e9b942f27da7a90ee0d8ca2a6f4
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Nov 10 15:50:23 2017 +0100
+
+    also test perl 5.26
+
+commit 7d1e7bf38c7ca8c274e6b2476bb32f12c6aa11d7
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Nov 1 11:56:54 2017 +0100
+
+    ready for 0.2.2
+
 commit f002791c3b64188a4b77a3b42a92ea6dc09baaa8
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Mon Oct 30 17:34:34 2017 +0100
