@@ -1,3 +1,21 @@
+commit 199b5a8945c9def57a0b0bb37e1856fc7883fdf7
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Feb 19 22:14:24 2018 +0100
+
+    add 'auto_rebuild'
+
+commit b41b62905c259f1c66886149f1acff5dc23126f5
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Jan 12 20:15:31 2018 +0100
+
+    fix regression for 'diff' caused by dash versions
+
+commit 1da61e18df9ad2fcf050e3194d214ae095606b8c
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Jan 10 13:23:57 2018 +0100
+
+    ready for 0.2.3
+
 commit 8251ea054b882def1517f97fa01b97fc989abad4
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Wed Jan 10 12:31:45 2018 +0100
