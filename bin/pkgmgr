@@ -192,6 +192,9 @@ sub main {
 
             processPackages($config, $repo, $opts);
 
+            $pkgMgr->rebuildRepo($config, $repo, { dst => 1 })
+                if $opts->{publish} && $config->{GENERAL}->{auto_rebuild} eq 'yes';
+
             last;
         };
         /^pull$/ && do {
@@ -422,7 +425,7 @@ rebuild remote/destination bloody repository
     
 =head1 COPYRIGHT
 
-Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 

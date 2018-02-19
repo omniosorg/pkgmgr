@@ -44,6 +44,12 @@ my $SCHEMA = sub {
                 default      => 30,
                 validator    => $sv->regexp(qr/^\d+$/, 'not a number'),
             },
+            auto_rebuild     => {
+                optional     => 1,
+                description  => 'automatically rebuild catalog/index after publishing',
+                example      => '"auto_rebuild" : "yes"',
+                validator    => $sv->elemOf(qw(yes no)),
+            },
         },
     },
     REPOS   => {
