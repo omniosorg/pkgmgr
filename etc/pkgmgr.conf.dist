@@ -3,7 +3,8 @@
         "cert_file"        : "<path>",
         "key_file"         : "<path>",
         "connect_timeout"  : "60",
-        "lowspeed_timeout" : "30"
+        "lowspeed_timeout" : "30",
+        "auto_rebuild"     : "yes"
     },
     "REPOS" : {
         "r151022" : {
