@@ -14,7 +14,7 @@ my $CONFILE = "$FindBin::RealBin/../etc/" . basename($0) . '.conf'; # CONFFILE
 
 my $SCHEMA = sub {
     my $sv = PkgMgr::Utils->new();
-    
+
     return {
     GENERAL => {
         optional => 1,
@@ -23,7 +23,7 @@ my $SCHEMA = sub {
                 description  => 'path to certificate file',
                 example      => '"cert_file" : "/omniosorg/ssl/certs/ooce_cert.pem"',
                 validator    => $sv->file('<', 'Cannot open file'),
-            },              
+            },
             key_file         => {
                 description  => 'path to certificate key file',
                 example      => '"key_file" : "/omniosorg/ssl/private/ooce_key.pem"',
@@ -66,7 +66,7 @@ my $SCHEMA = sub {
                         description => 'source (local) repository',
                         example     => '"src_repo" : "/omniosorg/_r22_repo"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
-                    },     
+                    },
                     dst_repo     => {
                         description => 'destination (remote) repository',
                         example     => '"dst_repo" : "https://pkg.omniosce.org/r151022/core"',
@@ -119,7 +119,7 @@ sub new {
     my $class = shift;
     my $self  = { @_ };
 
-    $self->{cfg} = Data::Processor->new($SCHEMA->()); 
+    $self->{cfg} = Data::Processor->new($SCHEMA->());
 
     return bless $self, $class;
 }
@@ -128,13 +128,13 @@ sub loadConfig {
     my $self     = shift;
     my $repo     = shift;
     my $confFile = shift // $CONFILE;
-    
+
     open my $fh, '<', $confFile or die "ERROR: opening config file '$confFile': $!\n";
     my $configJSON = do { local $/; <$fh>; };
     close $fh;
-    
+
     my $config = JSON::PP->new->decode($configJSON);
-    
+
     my $ec = $self->{cfg}->validate($config);
     $ec->count and die join ("\n", map { $_->stringify } @{$ec->{errors}}) . "\n";
 

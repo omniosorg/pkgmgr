@@ -3,6 +3,7 @@ package PkgMgr;
 use strict;
 use warnings;
 use Time::Piece;
+use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 
 # constants/tools
 my $PKGREPO = '/usr/bin/pkgrepo';
@@ -24,14 +25,14 @@ my $getRepoPath = sub {
     my $config = shift;
     my $repo   = shift;
     my $opt    = shift;
-    
+
     $opt->{staging} && do {
         exists $config->{REPOS}->{$repo}->{staging_repo}
             or die "ERROR: no staging repository defined in config file.\n";
-        
+
         return $config->{REPOS}->{$repo}->{staging_repo};
     };
-    
+
     return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dst_repo' : 'src_repo'};
 };
 
@@ -61,7 +62,7 @@ my $extractPublisher = sub {
 my $getReleasePublisher = sub {
     my $config = shift;
     my $repo   = shift;
-    
+
     return ($config->{REPOS}->{$repo}->{release}, $config->{REPOS}->{$repo}->{publisher});
 };
 
@@ -77,7 +78,7 @@ sub hasStaging {
     my $self   = shift;
     my $config = shift;
     my $repo   = shift;
-    
+
     return exists $config->{REPOS}->{$repo}->{staging_repo};
 }
 
@@ -85,7 +86,7 @@ sub needsSigning {
     my $self   = shift;
     my $config = shift;
     my $repo   = shift;
-    
+
     return $config->{REPOS}->{$repo}->{signing} eq 'yes';
 }
 
@@ -193,9 +194,9 @@ sub getSrcDstRepos {
                     && !$opts->{stage}              ? { staging => 1 }
                 :                                     { src     => 1 }
     );
-        
+
     my $dstRepo = $getRepoPath->($config, $repo,
-                  $opts->{pull}  ? { src => 1     } 
+                  $opts->{pull}  ? { src => 1     }
                 : $opts->{stage} ? { staging => 1 }
                 :                  { dst => 1     }
     );
@@ -271,6 +272,49 @@ sub rebuildRepo {
         $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file}) : ()));
 
     system (@cmd) && die "ERROR: rebuilding repo '$repoPath'.\n";
+}
+
+sub checkUname {
+    my $self   = shift;
+    my $config = shift;
+    my $repo   = shift;
+    my $opts   = shift;
+    my $pkgs   = shift;
+
+    my ($srcRepo, $dstRepo)   = $self->getSrcDstRepos($config, $repo, $opts);
+    my ($release, $publisher) = $getReleasePublisher->($config, $repo);
+    my $branch = $release =~ /[13579]$/ ? 'master' : "r$release";
+
+    my ($pkg, $ver) =
+        map { local $_ = $_; s/([^^A-Za-z0-9\-_.!~*'()])/ sprintf "%%%0X", ord $1 /eg; $_ }
+        map { local $_ = $_; s|^pkg://$publisher/||; split /\@/, $_, 2 }
+        grep { m|system/kernel/platform| } @$pkgs or return;
+
+    # only checking if publishing from local repository
+    return if $srcRepo =~ /^http/;
+
+    print "Checking uname...\n\n";
+
+    open my $fh, '<', "$srcRepo/publisher/$publisher/pkg/$pkg/$ver"
+        or die "ERROR: cannot open manifest: $!\n";
+
+    my ($hash, $pref) = map {
+        m|^\S+\s+((\S{2})\S+).*path=platform/i86pc/kernel/amd64/unix.*debug\.illumos=false|
+            ? ($1, $2) : ()
+    } (<$fh>)
+        or die "ERROR: hash file missing\n";
+
+    close $fh;
+
+    my $contents;
+    gunzip "$srcRepo/publisher/$publisher/file/$pref/$hash" => \$contents
+        or die "ERROR: gunzip hash file failed: $GunzipError\n";
+
+    my ($uname) = $contents =~ /(omnios-[^-]+-[\da-f]{10})/
+        or die "ERROR: cannot extract uname.\n";
+
+    $uname =~ /^omnios-$branch/
+        or die "ERROR: publishing from wrong branch: $uname\n";
 }
 
 1;
