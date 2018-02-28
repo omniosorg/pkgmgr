@@ -22,13 +22,13 @@ $ENV{PERLDOC_PAGER} ||= '/usr/bin/less -rins' if -x '/usr/bin/less';
 my $pkgMgr   = PkgMgr->new();
 my $pkgUtils = PkgMgr::Utils->new();
 
-sub listPackages {   
+sub listPackages {
     return $pkgMgr->fetchPackages(shift, shift, shift, [ @ARGV, @{$pkgUtils->getSTDIN()} ]);
 }
 
 sub printPackages {
     my $pkgList = shift;
-    
+
     print join ("\n", @$pkgList) . (@$pkgList ? "\n" : '');
 }
 
@@ -72,32 +72,33 @@ sub processPackages {
     my $opts    = shift;
 
     my $src      = $pkgMgr->getSrc($config, $repo, $opts);
-    my $packages = listPackages($config, $repo, $src); 
-
+    my $packages = listPackages($config, $repo, $src);
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
-    
+
+    $pkgMgr->checkUname($config, $repo, $opts, $pkgList);
+
     $pkgMgr->needsSigning($config, $repo) && $src->{src} && do {
         print "Signing the following packages in source repository:\n";
         printPackages($pkgList);
-        
+
         askContinue() if !$opts->{y};
-        
+
         $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
 
         print "\n";
     };
-    
+
     my ($srcRepo, $dstRepo) = $pkgMgr->getSrcDstRepos($config, $repo, $opts);
-    
+
     # remove packages that are 'on hold'
     $pkgList = $pkgMgr->filterOnHold($config, $repo, $pkgList) if !$opts->{pull};
 
     print '' . ($opts->{pull} ? 'Pulling' : 'Publishing')
         . " the following packages from '$srcRepo' to '$dstRepo':\n";
     printPackages($pkgList);
-    
+
     askContinue() if !$opts->{y};
-    
+
     $pkgMgr->publishPackages($config, $repo, $opts, $pkgList);
 }
 
@@ -321,13 +322,13 @@ B<pkgmgr> I<command> [I<options...>]
 where 'command' is one of the following:
 
     list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
-    
+
     diff <ref_repo> [--src|dst|staging] <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
 
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
-    
+
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
-    
+
     pull <repo> [--from=<pull_src>] [-y] [-n] [pkg_fmri_pattern ...]
 
     export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
@@ -335,13 +336,13 @@ where 'command' is one of the following:
     remove <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
     rebuild <repo> [--src|dst|staging]
-    
+
     help
-    
+
     man
-    
+
     version
-    
+
 =head1 DESCRIPTION
 
 Use pkgmgr to manage package publishing.
@@ -422,7 +423,7 @@ publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
 rebuild remote/destination bloody repository
 
     pkgmgr rebuild bloody --dst
-    
+
 =head1 COPYRIGHT
 
 Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
