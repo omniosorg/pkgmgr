@@ -1,3 +1,15 @@
+commit 11dd52743cc6a73bf0e7d472afd91c4304baffdf
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Feb 28 15:15:42 2018 +0100
+
+    add uname check
+
+commit fbbc2fb6815fc0c62bf4cf94a8b4c22926188b47
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Feb 19 23:02:03 2018 +0100
+
+    ready for 0.2.4
+
 commit 199b5a8945c9def57a0b0bb37e1856fc7883fdf7
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Mon Feb 19 22:14:24 2018 +0100

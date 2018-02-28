@@ -9,13 +9,13 @@ B<pkgmgr> I<command> [I<options...>]
 where 'command' is one of the following:
 
     list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
-    
+
     diff <ref_repo> [--src|dst|staging] <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
 
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
-    
+
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
-    
+
     pull <repo> [--from=<pull_src>] [-y] [-n] [pkg_fmri_pattern ...]
 
     export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
@@ -23,13 +23,13 @@ where 'command' is one of the following:
     remove <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
     rebuild <repo> [--src|dst|staging]
-    
+
     help
-    
+
     man
-    
+
     version
-    
+
 =head1 DESCRIPTION
 
 Use pkgmgr to manage package publishing.
@@ -110,7 +110,7 @@ publish all packages listed in the file 'pkg_list.txt' to repository 'bloody'
 rebuild remote/destination bloody repository
 
     pkgmgr rebuild bloody --dst
-    
+
 =head1 COPYRIGHT
 
 Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
