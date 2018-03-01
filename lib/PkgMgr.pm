@@ -310,7 +310,7 @@ sub checkUname {
     gunzip "$srcRepo/publisher/$publisher/file/$pref/$hash" => \$contents
         or die "ERROR: gunzip hash file failed: $GunzipError\n";
 
-    my ($uname) = $contents =~ /(omnios-[^-]+-[\da-f]{10})/
+    my ($uname) = $contents =~ /(omnios-.+?-[\da-f]{10})/
         or die "ERROR: cannot extract uname.\n";
 
     $uname =~ /^omnios-$branch/
