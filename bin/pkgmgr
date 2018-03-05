@@ -194,7 +194,7 @@ sub main {
             processPackages($config, $repo, $opts);
 
             $pkgMgr->rebuildRepo($config, $repo, { dst => 1 })
-                if $opts->{publish} && $config->{GENERAL}->{auto_rebuild} eq 'yes';
+                if $opts->{publish} && $config->{GENERAL}->{auto_rebuild} eq 'yes' && !$opts->{n};
 
             last;
         };
