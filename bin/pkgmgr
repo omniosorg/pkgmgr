@@ -83,7 +83,7 @@ sub processPackages {
 
         askContinue() if !$opts->{y};
 
-        $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
+        $pkgMgr->signPackages($config, $repo, { %$opts, src => 1 }, $pkgList);
 
         print "\n";
     };
@@ -177,6 +177,29 @@ sub main {
             GetOptions($opts, qw(src dst staging)) or exit 1;
 
             $pkgMgr->rebuildRepo($config, $repo, $opts);
+
+            last;
+        };
+        /^sign$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig($repo);
+
+            my $opts = {};
+            GetOptions($opts, qw(y n src dst staging)) or exit 1;
+
+            $pkgMgr->needsSigning($config, $repo)
+                or die "ERROR: signing is disabled for repository '$repo'.\n";
+
+            my $packages = listPackages($config, $repo, $opts);
+            my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
+            my $repoPath = $pkgMgr->getRepoPath($config, $repo, $opts);
+
+            print "Signing the following packages in '$repoPath':\n";
+            printPackages($pkgList);
+
+            askContinue() if !$opts->{y};
+
+            $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
 
             last;
         };
@@ -325,6 +348,8 @@ where 'command' is one of the following:
 
     diff <ref_repo> [--src|dst|staging] <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
 
+    sign <repo> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
+
     stage <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
@@ -362,6 +387,12 @@ returns a diff of package versions in the repositories that match the
 B<pkg_fmri_pattern>, publisher and release.
 Use the B<--src|dst|staging> option to specify which repositories to diff.
 Defaults to B<--src> for B<ref_repo> and to B<--dst> for B<diff_repo>.
+
+=head2 B<sign>
+
+signs the packages that match the B<pkg_fmri_pattern>, publisher and release.
+Use the B<--src|dst|staging> option to specify which repositoriy.
+Defaults to B<--src>.
 
 =head2 B<stage>
 

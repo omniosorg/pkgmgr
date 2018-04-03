@@ -21,21 +21,6 @@ my %TIME_FACTOR = (
 );
 
 # private methods
-my $getRepoPath = sub {
-    my $config = shift;
-    my $repo   = shift;
-    my $opt    = shift;
-
-    $opt->{staging} && do {
-        exists $config->{REPOS}->{$repo}->{staging_repo}
-            or die "ERROR: no staging repository defined in config file.\n";
-
-        return $config->{REPOS}->{$repo}->{staging_repo};
-    };
-
-    return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dst_repo' : 'src_repo'};
-};
-
 my $getEpoch = sub {
     return Time::Piece->strptime(shift, '%Y%m%dT%H%M%SZ')->epoch;
 };
@@ -102,6 +87,22 @@ sub isSigned {
     return grep { /^signature/ } (<$pkg>);
 }
 
+sub getRepoPath {
+    my $self   = shift;
+    my $config = shift;
+    my $repo   = shift;
+    my $opt    = shift;
+
+    $opt->{staging} && do {
+        exists $config->{REPOS}->{$repo}->{staging_repo}
+            or die "ERROR: no staging repository defined in config file.\n";
+
+        return $config->{REPOS}->{$repo}->{staging_repo};
+    };
+
+    return $config->{REPOS}->{$repo}->{$opt->{dst} ? 'dst_repo' : 'src_repo'};
+}
+
 sub fetchPackages {
     my $self   = shift;
     my $config = shift;
@@ -112,7 +113,7 @@ sub fetchPackages {
     $fmri = [ '*' ] if !@$fmri;
     my $epoch = $opts->{t} ? $getOptEpoch->($opts->{t}) : 0;
 
-    my $repoPath = $getRepoPath->($config, $repo, $opts);
+    my $repoPath = $self->getRepoPath($config, $repo, $opts);
 
     my @cmd = ($PKGREPO, qw(list -F json -s), $repoPath, @$fmri);
     open my $cmd, '-|', @cmd or die "ERROR: executing '$PKGREPO': $!\n";
@@ -158,11 +159,15 @@ sub signPackages {
     my $opts   = shift;
     my $pkgs   = shift;
 
-    my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
+    my $repoPath = $self->getRepoPath($config, $repo, $opts);
+
+    my @cert = $opts->{src} ? ()
+        : ('--dkey',  $config->{GENERAL}->{key_file},
+           '--dcert', $config->{GENERAL}->{cert_file});
 
     my @cmd = ($PKGSIGN, '-c', $config->{GENERAL}->{cert_file},
         '-k', $config->{GENERAL}->{key_file},
-        ($opts->{n} ? '-n' : ()), '-s', $repoPath, @$pkgs);
+        ($opts->{n} ? '-n' : ()), '-s', $repoPath, @cert, @$pkgs);
 
     system (@cmd) && die "ERROR: signing packages: $!\n";
 }
@@ -173,10 +178,10 @@ sub getSrc {
     my $repo    = shift;
     my $opts    = shift;
 
-    return $opts->{pull} || ($opts->{export} && $opts->{dst}) ? { dst     => 1 }
+    return $opts->{pull} || (($opts->{export} || $opts->{sign}) && $opts->{dst}) ? { dst     => 1 }
         : ($opts->{publish} && $self->hasStaging($config, $repo))
-            || ($opts->{export} && $opts->{staging})          ? { staging => 1 }
-        :                                                       { src     => 1 }
+            || (($opts->{export} || $opts->{sign}) && $opts->{staging})          ? { staging => 1 }
+        :                                                                          { src     => 1 }
 }
 
 sub getSrcDstRepos {
@@ -185,20 +190,20 @@ sub getSrcDstRepos {
     my $repo   = shift;
     my $opts   = shift;
 
-    return ($getRepoPath->($config, $repo, $opts), $opts->{d})
+    return ($self->getRepoPath($config, $repo, $opts), $opts->{d})
         if $opts->{export};
 
-    my $srcRepo = $getRepoPath->($config, $repo,
+    my $srcRepo = $self->getRepoPath($config, $repo,
                   $opts->{pull}                     ? { dst     => 1 }
                 : $self->hasStaging($config, $repo)
                     && !$opts->{stage}              ? { staging => 1 }
                 :                                     { src     => 1 }
     );
 
-    my $dstRepo = $getRepoPath->($config, $repo,
-                  $opts->{pull}  ? { src => 1     }
+    my $dstRepo = $self->getRepoPath($config, $repo,
+                  $opts->{pull}  ? { src     => 1 }
                 : $opts->{stage} ? { staging => 1 }
-                :                  { dst => 1     }
+                :                  { dst     => 1 }
     );
 
     return ($srcRepo, $dstRepo);
@@ -253,7 +258,7 @@ sub removePackages {
     my $opts   = shift;
     my $pkgs   = shift;
 
-    my $repoPath = $getRepoPath->($config, $repo, { src => 1 });
+    my $repoPath = $self->getRepoPath($config, $repo, { src => 1 });
 
     my @cmd = ($PKGREPO, qw(remove -s), $repoPath, ($opts->{n} ? '-n' : ()), @$pkgs);
 
@@ -266,7 +271,7 @@ sub rebuildRepo {
     my $repo   = shift;
     my $opts   = shift;
 
-    my $repoPath = $getRepoPath->($config, $repo, $opts);
+    my $repoPath = $self->getRepoPath($config, $repo, $opts);
 
     my @cmd = ($PKGREPO, qw(rebuild -s), $repoPath, ($opts->{staging} || $opts->{dst} ? ('--key',
         $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file}) : ()));
