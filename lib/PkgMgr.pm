@@ -35,7 +35,7 @@ my $getOptEpoch = sub {
         or die "ERROR: invalid interval '$timeOpt'.\n";
     # default to seconds
     $unit //= 's';
-    grep { $_ eq $unit } keys %TIME_FACTOR or die "ERROR: invalid time suffix '$unit'.\n";
+    exists $TIME_FACTOR{$unit} or die "ERROR: invalid time suffix '$unit'.\n";
 
     return gmtime->epoch - $value * $TIME_FACTOR{$unit};
 };
