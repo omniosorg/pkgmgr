@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2018-02-28" "0.2.5" "pkgmgr"
+.TH PKGMGR 1 "2018-04-04" "0.2.6" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -150,6 +150,8 @@ where 'command' is one of the following:
 \&    list <repo> [\-t <interval>|<ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
 \&    diff <ref_repo> [\-\-src|dst|staging] <diff_repo> [\-\-src|dst|staging] [pkg_fmri_pattern ...]
+\&
+\&    sign <repo> [\-y] [\-n] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
 \&    stage <repo> [\-y] [\-n] [pkg_fmri_pattern ...]
 \&
@@ -186,6 +188,11 @@ returns a diff of package versions in the repositories that match the
 \&\fBpkg_fmri_pattern\fR, publisher and release.
 Use the \fB\-\-src|dst|staging\fR option to specify which repositories to diff.
 Defaults to \fB\-\-src\fR for \fBref_repo\fR and to \fB\-\-dst\fR for \fBdiff_repo\fR.
+.SS "\fBsign\fP"
+.IX Subsection "sign"
+signs the packages that match the \fBpkg_fmri_pattern\fR, publisher and release.
+Use the \fB\-\-src|dst|staging\fR option to specify which repositoriy.
+Defaults to \fB\-\-src\fR.
 .SS "\fBstage\fP"
 .IX Subsection "stage"
 stages the packages that match the \fBpkg_fmri_pattern\fR, publisher and release.

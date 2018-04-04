@@ -1,3 +1,33 @@
+commit d21174c80e0180772a7a7298b5c3f51b98b1cc44
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Apr 3 17:42:16 2018 +0200
+
+    no need for grep
+
+commit c56f7e7c349c640e67a1f669cf5b1351255f95fc
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Tue Apr 3 17:01:15 2018 +0200
+
+    'sign' option added
+
+commit 6e4cc15008b89c973a36c739fd69af73ae9809fa
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Mon Mar 5 13:12:22 2018 +0100
+
+    do not rebuild repository on dry-runs
+
+commit 5ee93a905126b71266289aeaa81b8ed6ab9ac102
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Mar 2 00:41:02 2018 +0100
+
+    relax regexp to handle branches containing hyphens
+
+commit 033a3e740e3132e2a2b74811623a39dcaeb3d082
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Feb 28 16:15:18 2018 +0100
+
+    ready for 0.2.5
+
 commit 11dd52743cc6a73bf0e7d472afd91c4304baffdf
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Wed Feb 28 15:15:42 2018 +0100

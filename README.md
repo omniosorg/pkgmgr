@@ -5,9 +5,9 @@ pkgmgr
 
 [![Build Status](https://travis-ci.org/omniosorg/pkgmgr.svg?branch=master)](https://travis-ci.org/omniosorg/pkgmgr)
 
-Version: 0.2.5
+Version: 0.2.6
 
-Date: 2018-02-28
+Date: 2018-04-04
 
 pkgmgr is an IPS package management and publishing tool.
 
