@@ -169,6 +169,18 @@ sub main {
 
             last;
         };
+        /^url$/ && do {
+            my $repo   = shift @ARGV or pod2usage(1);
+            my $config = $pkgConfig->loadConfig($repo);
+
+            my $opts = {};
+            GetOptions($opts, qw(src dst staging)) or exit 1;
+
+            my $repoPath = $pkgMgr->getRepoPath($config, $repo, $opts);
+            print "$repoPath\n";
+
+            last;
+        };
         /^rebuild$/ && do {
             my $repo   = shift @ARGV or pod2usage(1);
             my $config = $pkgConfig->loadConfig($repo);
@@ -346,6 +358,8 @@ where 'command' is one of the following:
 
     list <repo> [-t <interval>|<ISO time>] [--src|dst|staging] [pkg_fmri_pattern ...]
 
+    url <repo> [--src|dst|staging]
+
     diff <ref_repo> [--src|dst|staging] <diff_repo> [--src|dst|staging] [pkg_fmri_pattern ...]
 
     sign <repo> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
@@ -380,6 +394,11 @@ repository to list. Defaults to B<--src> if not defined.
 If the B<-t> option is used, only packages that have a more recent ISO timestamp will
 be listed or a timestamp within B<interval> timespan. B<interval> can be suffixed
 with s, M, h, d, m, y (defaults to seconds).
+
+=head2 B<url>
+
+prints the url of the repository. Use the B<--src|dst|staging> option to specify
+which repository. Defaults to B<--src> if not defined.
 
 =head2 B<diff>
 
