@@ -310,6 +310,8 @@ sub main {
                 my $rep = $_;
                 $_ => {
                     map { $pkgUtils->getNameVersion($_->{'pkg.fmri'}) }
+                       grep { !exists $_->{'pkg.obsolete'} &&
+                           !exists $_->{'pkg.renamed'} }
                         reverse @{listPackages($config, $opts->{$rep}->{repo},
                             $opts->{$rep}->{opts})}
                 }
