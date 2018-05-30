@@ -211,6 +211,9 @@ sub main {
 
             askContinue() if !$opts->{y};
 
+            # default to 'src' which won't add --dcert and --dkey
+            # as we don't want to upset older pkg(5) versions
+            $opts->{src} = 1 if !($opts->{dst} || $opts->{staging});
             $pkgMgr->signPackages($config, $repo, $opts, $pkgList);
 
             last;
