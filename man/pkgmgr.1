@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PKGMGR 1"
-.TH PKGMGR 1 "2018-04-04" "0.2.6" "pkgmgr"
+.TH PKGMGR 1 "2018-09-14" "0.2.7" "pkgmgr"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -148,6 +148,8 @@ where 'command' is one of the following:
 .PP
 .Vb 1
 \&    list <repo> [\-t <interval>|<ISO time>] [\-\-src|dst|staging] [pkg_fmri_pattern ...]
+\&
+\&    url <repo> [\-\-src|dst|staging]
 \&
 \&    diff <ref_repo> [\-\-src|dst|staging] <diff_repo> [\-\-src|dst|staging] [pkg_fmri_pattern ...]
 \&
@@ -182,6 +184,10 @@ repository to list. Defaults to \fB\-\-src\fR if not defined.
 If the \fB\-t\fR option is used, only packages that have a more recent \s-1ISO\s0 timestamp will
 be listed or a timestamp within \fBinterval\fR timespan. \fBinterval\fR can be suffixed
 with s, M, h, d, m, y (defaults to seconds).
+.SS "\fBurl\fP"
+.IX Subsection "url"
+prints the url of the repository. Use the \fB\-\-src|dst|staging\fR option to specify
+which repository. Defaults to \fB\-\-src\fR if not defined.
 .SS "\fBdiff\fP"
 .IX Subsection "diff"
 returns a diff of package versions in the repositories that match the

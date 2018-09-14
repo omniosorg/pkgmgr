@@ -1,3 +1,33 @@
+commit b75aec22d6b2067e07c3be846bbf885d386e6339
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Sep 14 20:27:59 2018 +0200
+
+    fix to handle 'reverse components of dash-revision'
+
+commit 905166a107bff7d5240e91494422bd24ff248600
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed May 30 19:05:51 2018 +0200
+
+    don't use --dcert and --dkey for local signing
+
+commit 6fb0269810b3fcc2ebf85132a2d713096e623970
+Author: Andy Fiddaman <omnios@citrus-it.co.uk>
+Date:   Mon Apr 30 15:38:48 2018 +0000
+
+    pkgmgr diff should treat obsolete/renamed packages as gone
+
+commit 31a905d8baa8d94d9a82fc8deaf892d8dc37c29d
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Apr 25 18:34:45 2018 +0200
+
+    url option added
+
+commit c184db46c685bc4b2d89d79d4a518fe6eacefd2f
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Wed Apr 4 16:51:33 2018 +0200
+
+    ready for 0.2.6
+
 commit d21174c80e0180772a7a7298b5c3f51b98b1cc44
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Tue Apr 3 17:42:16 2018 +0200
