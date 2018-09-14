@@ -121,7 +121,7 @@ sub fetchPackages {
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
 
     my $packages = [
-        grep { $_->{branch} =~ /^\d+\.$release$/
+        grep { $_->{branch} =~ /^(?:$release\.\d+|\d+\.$release)$/
             && $extractPublisher->($_) eq $publisher
             && $getEpoch->($_->{timestamp}) > $epoch
         } @{JSON::PP->new->decode(<$cmd>)}
