@@ -75,7 +75,7 @@ sub processPackages {
     my $packages = listPackages($config, $repo, $src);
     my $pkgList  = [ map { $_->{'pkg.fmri'} } @$packages ];
 
-    $pkgMgr->checkUname($config, $repo, $opts, $pkgList);
+    $pkgMgr->checkUname($config, $repo, $opts, $pkgList) if !$opts->{export};
 
     $pkgMgr->needsSigning($config, $repo) && $src->{src} && do {
         print "Signing the following packages in source repository:\n";
