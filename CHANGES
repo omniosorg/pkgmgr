@@ -1,3 +1,15 @@
+commit 60abde2c97cd4c69b0b42553e6b2c9d28d6725d6
+Author: Andy Fiddaman <omnios@citrus-it.co.uk>
+Date:   Sun Sep 16 09:53:17 2018 +0000
+
+    Do not check uname if exporting
+
+commit d601f368eaef060420e1f33801832e76b761fa05
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Fri Sep 14 21:58:17 2018 +0200
+
+    ready for 0.2.7
+
 commit b75aec22d6b2067e07c3be846bbf885d386e6339
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Fri Sep 14 20:27:59 2018 +0200
