@@ -107,6 +107,13 @@ my $SCHEMA = sub {
                             },
                         },
                     },
+                    restricted => {
+                        optional    => 1,
+                        description => 'restricted repository; authentication needed (yes/no)',
+                        example     => '"restricted" : "no"',
+                        default     => 'no',
+                        validator   => $sv->elemOf(qw(yes no)),
+                    },
                 },
             },
         },

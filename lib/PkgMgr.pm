@@ -115,7 +115,11 @@ sub fetchPackages {
 
     my $repoPath = $self->getRepoPath($config, $repo, $opts);
 
-    my @cmd = ($PKGREPO, qw(list -F json -s), $repoPath, @$fmri);
+    my @cert = $config->{REPOS}->{$repo}->{restricted} ne 'yes' ? ()
+        : ('--key',  $config->{GENERAL}->{key_file},
+           '--cert', $config->{GENERAL}->{cert_file});
+
+    my @cmd = ($PKGREPO, qw(list -F json -s), $repoPath, @cert, @$fmri);
     open my $cmd, '-|', @cmd or die "ERROR: executing '$PKGREPO': $!\n";
 
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
@@ -124,7 +128,7 @@ sub fetchPackages {
         grep { $_->{branch} =~ /^(?:$release\.\d+|\d+\.$release)$/
             && $extractPublisher->($_) eq $publisher
             && $getEpoch->($_->{timestamp}) > $epoch
-        } @{JSON::PP->new->decode(<$cmd>)}
+        } @{JSON::PP->new->decode(<$cmd> // '[]')}
     ];
 
     if ($opts->{long}) {
@@ -241,6 +245,10 @@ sub publishPackages {
         : ('--dkey',  $config->{GENERAL}->{key_file},
            '--dcert', $config->{GENERAL}->{cert_file});
 
+    push @cert, $config->{REPOS}->{$repo}->{restricted} ne 'yes' ? ()
+        : ('--key',  $config->{GENERAL}->{key_file},
+           '--cert', $config->{GENERAL}->{cert_file});
+
     # set timeout env variables
     $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connect_timeout};
     $ENV{PKG_CLIENT_LOWSPEED_TIMEOUT} = $config->{GENERAL}->{lowspeed_timeout};
@@ -328,7 +336,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 

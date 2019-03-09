@@ -39,6 +39,14 @@
             "dst_repo"     : "<path/URL>",
             "publisher"    : "extra.omnios",
             "release"      : "r151023"
+        },
+        "security" : {
+            "signing"      : "yes",
+            "restricted"   : "yes",
+            "src_repo"     : "<path/URL>",
+            "dst_repo"     : "<path/URL>",
+            "publisher"    : "omnios",
+            "release"      : "r151028"
         }
     }
 }
