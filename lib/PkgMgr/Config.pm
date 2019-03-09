@@ -22,7 +22,7 @@ my $SCHEMA = sub {
             cert_file        => {
                 description  => 'path to certificate file',
                 example      => '"cert_file" : "/omniosorg/ssl/certs/ooce_cert.pem"',
-                validator    => $sv->file('<', 'Cannot open file'),
+                validator    => $sv->x509Cert,
             },
             key_file         => {
                 description  => 'path to certificate key file',
@@ -107,6 +107,13 @@ my $SCHEMA = sub {
                             },
                         },
                     },
+                    restricted => {
+                        optional    => 1,
+                        description => 'restricted repository; authentication needed (yes/no)',
+                        example     => '"restricted" : "no"',
+                        default     => 'no',
+                        validator   => $sv->elemOf(qw(yes no)),
+                    },
                 },
             },
         },
@@ -150,7 +157,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
