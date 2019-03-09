@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use POSIX qw(isatty);
+use Crypt::OpenSSL::X509;
+use Time::Seconds qw(ONE_MONTH);
 
 my @RSYNC = qw(/usr/bin/rsync -ahh --stats --delete-after);
 
@@ -54,6 +56,24 @@ sub elemOf {
     }
 }
 
+sub x509Cert {
+    my $self = shift;
+
+    return sub {
+        local $@;
+        my $x509 = eval {
+            local $SIG{__DIE__};
+            Crypt::OpenSSL::X509->new_from_file(shift);
+        };
+        return $@ if $@;
+
+        print STDERR "\n*** WARNING: your certificate will expire on " . $x509->notAfter . "! ***\n\n"
+            if $x509->checkend(ONE_MONTH);
+
+        return undef;
+    }
+}
+
 sub isaTTY {
     my $self = shift;
     return isatty(*STDIN);
@@ -88,7 +108,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2017 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
