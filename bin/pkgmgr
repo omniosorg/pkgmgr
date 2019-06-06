@@ -241,8 +241,11 @@ sub main {
             my $config = $pkgConfig->loadConfig($repo);
 
             my $opts = {};
-            GetOptions($opts, qw(y n from=s)) or exit 1;
+            GetOptions($opts, qw(y n dst staging from=s)) or exit 1;
             $opts->{$mainOpt} = 1;
+
+            $opts->{staging} && !$pkgMgr->hasStaging($config, $repo)
+                and die "ERROR: no staging repository defined for repository '$repo'.\n";
 
             # reference for convenience
             my $cfg = $config->{REPOS}->{$repo};
@@ -261,6 +264,8 @@ sub main {
                 last;
             };
 
+            # default to dst
+            $opts->{dst} = 1 if !$opts->{staging};
             processPackages($config, $repo, $opts);
 
             last;
@@ -373,7 +378,7 @@ where 'command' is one of the following:
 
     publish <repo> [-y] [-n] [pkg_fmri_pattern ...]
 
-    pull <repo> [--from=<pull_src>] [-y] [-n] [pkg_fmri_pattern ...]
+    pull <repo> [--from=<pull_src>] [--dst|staging] [-y] [-n] [pkg_fmri_pattern ...]
 
     export <repo> -d <path> [-y] [-n] [--src|dst|staging] [pkg_fmri_pattern ...]
 
@@ -432,6 +437,7 @@ Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
 
 pulls the packages that match B<pkg_fmri_pattern>, publisher and release.
 Use the B<-y> to say 'yes' to all questions asked, B<-n> for a dry-run.
+Defaults to B<--dst> if if not defined.
 If you specify B<--from=<pull_src>>, all packages will get rsynced from that
 location instead of pulled from the destination repo.
 
@@ -481,7 +487,7 @@ rebuild remote/destination bloody repository
 
 =head1 COPYRIGHT
 
-Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
