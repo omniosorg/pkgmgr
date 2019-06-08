@@ -182,10 +182,12 @@ sub getSrc {
     my $repo    = shift;
     my $opts    = shift;
 
-    return $opts->{pull} || (($opts->{export} || $opts->{sign}) && $opts->{dst}) ? { dst     => 1 }
-        : ($opts->{publish} && $self->hasStaging($config, $repo))
-            || (($opts->{export} || $opts->{sign}) && $opts->{staging})          ? { staging => 1 }
-        :                                                                          { src     => 1 }
+    return ($opts->{pull} && !$opts->{staging})
+           || (($opts->{export} || $opts->{sign}) && $opts->{dst})     ? { dst     => 1 }
+         : $opts->{pull}
+           || ($opts->{publish} && $self->hasStaging($config, $repo))
+           || (($opts->{export} || $opts->{sign}) && $opts->{staging}) ? { staging => 1 }
+         :                                                               { src     => 1 }
 }
 
 sub getSrcDstRepos {
@@ -198,10 +200,10 @@ sub getSrcDstRepos {
         if $opts->{export};
 
     my $srcRepo = $self->getRepoPath($config, $repo,
-                  $opts->{pull}                     ? { dst     => 1 }
+                  $opts->{pull} && !$opts->{staging}      ? { dst     => 1 }
                 : $self->hasStaging($config, $repo)
-                    && !$opts->{stage}              ? { staging => 1 }
-                :                                     { src     => 1 }
+                    && (!$opts->{stage} || $opts->{pull}) ? { staging => 1 }
+                :                                           { src     => 1 }
     );
 
     my $dstRepo = $self->getRepoPath($config, $repo,
