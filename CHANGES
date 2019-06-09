@@ -1,3 +1,21 @@
+commit dfa5f2cbb1ff873df7a4b8d228c69449b079b2c0
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Jun 8 10:04:18 2019 +0000
+
+    use https for cpanmin.us
+
+commit 8780a70ea861682b9b2674fd2aa1af8fa162ea26
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Thu Jun 6 20:31:03 2019 +0000
+
+    adding staging support for pull command
+
+commit 39b1f22b5493b767825d22ff9b44089c71937a1b
+Author: Dominik Hassler <hadfl@omniosce.org>
+Date:   Sat Mar 9 18:39:04 2019 +0100
+
+    ready for 0.3.0
+
 commit 3464a859b02ed7c7fb88a380e37dcff7fbd7541e
 Author: Dominik Hassler <hadfl@omniosce.org>
 Date:   Sat Mar 9 18:30:27 2019 +0100
