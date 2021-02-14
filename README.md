@@ -1,13 +1,13 @@
-<img src="http://www.omniosce.org/OmniOSce_logo.svg" height="128">
+<img src="https://www.omnios.org/OmniOSce_logo.svg" height="128">
 
 pkgmgr
 =========
 
-[![Build Status](https://travis-ci.org/omniosorg/pkgmgr.svg?branch=master)](https://travis-ci.org/omniosorg/pkgmgr)
+[![Unit Tests](https://github.com/omniosorg/pkgmgr/workflows/Unit%20Tests/badge.svg?branch=master&event=push)](https://github.com/omniosorg/pkgmgr/actions?query=workflow%3A%22Unit+Tests%22)
 
-Version: 0.3.1
+Version: 0.4.0
 
-Date: 2019-06-09
+Date: 2021-02-14
 
 pkgmgr is an IPS package management and publishing tool.
 
