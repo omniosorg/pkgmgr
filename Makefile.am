@@ -2,18 +2,20 @@
 
 AUTOMAKE_OPTIONS =  foreign
 
-SUBDIRS = thirdparty lib etc
+SUBDIRS = etc lib thirdparty
 
 BIN = bin/$(SCRIPT_NAME)
 
 MAN = man/$(SCRIPT_NAME).1
 POD = doc/$(SCRIPT_NAME).pod
 
-#PERLTESTS := $(shell find t -name "*.t")
+export PATH := /usr/gnu/bin:$(PATH)
+
+PERLTESTS := $(shell test -d t && find t -name "*.t")
 
 THIRDPARTY_DIR := $(shell pwd)/thirdparty
 
-EXTRA_DIST = VERSION COPYRIGHT README.md LICENSE CHANGES AUTHORS PERL_MODULES $(BIN) $(MAN) t/*.t
+EXTRA_DIST = VERSION COPYRIGHT README.md LICENSE CHANGES AUTHORS cpanfile $(BIN) $(PERLTESTS) $(MAN)
 
 YEAR := $(shell date +%Y)
 DATE := $(shell date +%Y-%m-%d)
@@ -27,17 +29,15 @@ imandir = $(mandir)/man1
 iman_DATA = $(MAN)
 
 doc/%.pod: bin/% VERSION
-	$(AM_V_GEN)mkdir -p doc;grep -A100000 '=head1 NAME' $< > $@
+	$(AM_V_at)mkdir -p doc; grep -A100000 '=head1 NAME' $< > $@
 
-man/%.1: bin/% VERSION
-	$(AM_V_GEN)mkdir -p man; test $(POD2MAN) = "no" || $(POD2MAN) --release=$(VERSION) --center=$(PACKAGE_NAME) $<  > $@
+man/%.1: doc/%.pod
+	$(AM_V_at)mkdir -p man; test $(POD2MAN) = "no" || $(POD2MAN) --release=$(VERSION) --center=$(PACKAGE_NAME) $< > $@
 
 dist_bin_SCRIPTS = $(BIN)
 
-dist-hook: thirdparty
+dist-hook: thirdparty $(POD)
 	$(PERL) -i -p -e 's/^our\s+\$$VERSION\s*=\s*".+?";/our \$$VERSION = "$(PACKAGE_VERSION)";/;'  $(distdir)/lib/$(CLASS_NAME)/*.pm
-
-dist-hook: $(POD)
 	$(PERL) -i -p -e 's/^my .*# VERSION/my \$$VERSION = q{$(PACKAGE_VERSION)}; # VERSION/' $(distdir)/$(BIN)
 
 install-exec-hook:
@@ -45,8 +45,6 @@ install-exec-hook:
 	cd "$(DESTDIR)$(exec_prefix)" && $(PERL) -i -p -e 's{.*# LIBDIR}{use lib qw($(libdir)); # LIBDIR}' $(BIN)
 	cd "$(DESTDIR)$(exec_prefix)" && $(PERL) -i -p -e 's{^#!.*perl.*}{#!$(PERL)};' $(BIN)
 	cd "$(DESTDIR)$(libdir)/PkgMgr" && $(PERL) -i -p -e 's{^my .*# CONFFILE}{my \$$CONFILE = "$(sysconfdir)/$(SCRIPT_NAME).conf"; # CONFFILE};' Config.pm
-	[ ! -d $(THIRDPARTY_DIR)/lib/perl5 ] || cp -fr $(THIRDPARTY_DIR)/lib/perl5/* $(DESTDIR)$(libdir)
 
-#test:
-#	$(PERL) "-MExtUtils::Command::MM" "-e" "test_harness(0, 'lib','thirdparty/lib/perl5')" t/*.t
-
+test:
+	$(PERL) "-MExtUtils::Command::MM" "-e" "test_harness(0, 'lib','thirdparty/lib/perl5')" $(PERLTESTS)
