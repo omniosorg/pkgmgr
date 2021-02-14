@@ -81,6 +81,9 @@ jobs:
         cd $HOME/test-install
         ./bin/pkgmgr version
 
+    - name: Run Tests
+      run: make test
+
     - name: Cache Prep
       run: |
         rm thirdparty/Makefile* thirdparty/cpan*snapshot
