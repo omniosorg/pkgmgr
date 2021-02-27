@@ -69,13 +69,13 @@ my $SCHEMA = sub {
                     },
                     dst_repo     => {
                         description => 'destination (remote) repository',
-                        example     => '"dst_repo" : "https://pkg.omniosce.org/r151022/core"',
+                        example     => '"dst_repo" : "https://pkg.omnios.org/r151022/core"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
                     staging_repo => {
                         optional    => 1,
                         description => 'staging repository',
-                        example     => '"staging_repo" : "https://pkg.omniosce.org/r151022/staging"',
+                        example     => '"staging_repo" : "https://pkg.omnios.org/r151022/staging"',
                         validator   => $sv->regexp(qr|^[-\w/.:_]+$|, 'not a valid repo path/URL'),
                     },
                     publisher   => {
@@ -175,7 +175,7 @@ this program. If not, see L<http://www.gnu.org/licenses/>.
 =head1 AUTHOR
 
 S<Andy Fiddaman E<lt>omnios@citrus-it.co.ukE<gt>>
-S<Dominik Hassler E<lt>hadfl@omniosce.orgE<gt>>
+S<Dominik Hassler E<lt>hadfl@omnios.orgE<gt>>
 
 =head1 HISTORY
 
