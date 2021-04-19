@@ -23,7 +23,12 @@ my $pkgMgr   = PkgMgr->new();
 my $pkgUtils = PkgMgr::Utils->new();
 
 sub listPackages {
-    return $pkgMgr->fetchPackages(shift, shift, shift, [ @ARGV, @{$pkgUtils->getSTDIN()} ]);
+    my $pkgs = $pkgMgr->fetchPackages(shift, shift, shift, [ @ARGV, @{$pkgUtils->getSTDIN()} ]);
+
+    # exit early if there are no matching packages
+    exit 1 if !@$pkgs;
+
+    return $pkgs;
 }
 
 sub printPackages {
