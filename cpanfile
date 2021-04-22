@@ -1,2 +1,2 @@
 requires 'Data::Processor';
-requires 'Crypt::OpenSSL::X509', '== 1.902';
+requires 'Crypt::OpenSSL::X509';
