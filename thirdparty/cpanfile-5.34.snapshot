@@ -1,0 +1,23 @@
+# carton snapshot format: version 1.0
+DISTRIBUTIONS
+  Crypt-OpenSSL-X509-1.905
+    pathname: J/JO/JONASBN/Crypt-OpenSSL-X509-1.905.tar.gz
+    provides:
+      Crypt::OpenSSL::X509 1.905
+    requirements:
+      ExtUtils::MakeMaker 6.59
+      perl 5.008
+  Data-Processor-1.0.6
+    pathname: M/MB/MBP/Data-Processor-1.0.6.tar.gz
+    provides:
+      Data::Processor 1.000006
+      Data::Processor::Error::Collection undef
+      Data::Processor::Error::Instance undef
+      Data::Processor::Generator undef
+      Data::Processor::PodWriter undef
+      Data::Processor::Transformer undef
+      Data::Processor::Validator undef
+      Data::Processor::ValidatorFactory undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008005
