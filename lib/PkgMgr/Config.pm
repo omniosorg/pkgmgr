@@ -20,11 +20,13 @@ my $SCHEMA = sub {
         optional => 1,
         members  => {
             cert_file        => {
+                optional     => 1,
                 description  => 'path to certificate file',
                 example      => '"cert_file" : "/omniosorg/ssl/certs/ooce_cert.pem"',
                 validator    => $sv->x509Cert,
             },
             key_file         => {
+                optional     => 1,
                 description  => 'path to certificate key file',
                 example      => '"key_file" : "/omniosorg/ssl/private/ooce_key.pem"',
                 validator    => $sv->file('<', 'Cannot open file'),
@@ -147,6 +149,12 @@ sub loadConfig {
 
     exists $config->{REPOS}->{$repo}
         or die "ERROR: repository '$repo' not defined in config file.\n";
+
+    if (!exists $config->{GENERAL}->{cert_file} || !exists $config->{GENERAL}->{key_file}) {
+        $config->{REPOS}->{$_}->{signing} eq 'no'
+            or die "ERROR: repository '$_' requires signing but no cert/key files defined in config.\n"
+                for keys %{$config->{REPOS}};
+    }
 
     return $config;
 }
