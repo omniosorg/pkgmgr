@@ -2,6 +2,7 @@
     "GENERAL" : {
         "cert_file"        : "<path>",
         "key_file"         : "<path>",
+        "tmp_dir"          : "<path>",
         "connect_timeout"  : "60",
         "lowspeed_timeout" : "30",
         "auto_rebuild"     : "yes"

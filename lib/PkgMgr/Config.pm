@@ -31,6 +31,12 @@ my $SCHEMA = sub {
                 example      => '"key_file" : "/omniosorg/ssl/private/ooce_key.pem"',
                 validator    => $sv->file('<', 'Cannot open file'),
             },
+            tmp_dir          => {
+                optional     => 1,
+                description  => 'TMPDIR for pkgrecv',
+                example      => '"tmp_dir" : "/omniosorg/pkgtmp"',
+                validator    => $sv->regexp(qr!^/.+$!, 'expected an absolute path'),
+            },
             connect_timeout  => {
                 optional     => 1,
                 description  => 'Seconds to wait trying to connect during transport operations.',

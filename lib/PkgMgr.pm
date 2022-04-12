@@ -2,8 +2,10 @@ package PkgMgr;
 
 use strict;
 use warnings;
-use Time::Piece;
+
+use File::Path qw(make_path);
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
+use Time::Piece;
 
 # constants/tools
 my $PKGREPO = '/usr/bin/pkgrepo';
@@ -254,6 +256,13 @@ sub publishPackages {
     # set timeout env variables
     $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connect_timeout};
     $ENV{PKG_CLIENT_LOWSPEED_TIMEOUT} = $config->{GENERAL}->{lowspeed_timeout};
+
+    # set TMPDIR env variable
+    if ($config->{GENERAL}->{tmp_dir}) {
+        -d $config->{GENERAL}->{tmp_dir} || make_path($config->{GENERAL}->{tmp_dir})
+            or die "ERROR: cannot create temporary directory '$config->{GENERAL}->{tmp_dir}'.\n";
+        $ENV{TMPDIR} = $config->{GENERAL}->{tmp_dir};
+    }
 
     my @cmd = ($PKGRECV, ($opts->{n} ? '-n' : ()), ($opts->{export} ? '-a' : ()),
         '-s', $srcRepo, '-d', $dstRepo, @cert, qw(-m latest), @$pkgs);
