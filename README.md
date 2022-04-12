@@ -5,9 +5,9 @@ pkgmgr
 
 [![Unit Tests](https://github.com/omniosorg/pkgmgr/workflows/Unit%20Tests/badge.svg?branch=master&event=push)](https://github.com/omniosorg/pkgmgr/actions?query=workflow%3A%22Unit+Tests%22)
 
-Version: 0.4.3
+Version: 0.4.4
 
-Date: 2021-11-18
+Date: 2022-04-12
 
 pkgmgr is an IPS package management and publishing tool.
 

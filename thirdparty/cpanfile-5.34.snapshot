@@ -1,16 +1,22 @@
 # carton snapshot format: version 1.0
 DISTRIBUTIONS
-  Crypt-OpenSSL-X509-1.910
-    pathname: J/JO/JONASBN/Crypt-OpenSSL-X509-1.910.tar.gz
+  Convert-ASN1-0.33
+    pathname: T/TI/TIMLEGGE/Convert-ASN1-0.33.tar.gz
     provides:
-      Crypt::OpenSSL::X509 1.910
+      Convert::ASN1 0.33
     requirements:
-      ExtUtils::MakeMaker 6.59
-      perl 5.008
-  Data-Processor-1.0.7
-    pathname: M/MB/MBP/Data-Processor-1.0.7.tar.gz
+      ExtUtils::MakeMaker 0
+  Crypt-OpenSSL-X509-1.913
+    pathname: J/JO/JONASBN/Crypt-OpenSSL-X509-1.913.tar.gz
     provides:
-      Data::Processor 1.000007
+      Crypt::OpenSSL::X509 1.913
+    requirements:
+      Convert::ASN1 0.33
+      ExtUtils::MakeMaker 0
+  Data-Processor-1.0.9
+    pathname: M/MB/MBP/Data-Processor-1.0.9.tar.gz
+    provides:
+      Data::Processor 1.000009
       Data::Processor::Error::Collection undef
       Data::Processor::Error::Instance undef
       Data::Processor::Generator undef
