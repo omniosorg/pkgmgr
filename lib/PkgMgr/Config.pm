@@ -115,11 +115,18 @@ my $SCHEMA = sub {
                             },
                         },
                     },
-                    restricted => {
+                    restricted  => {
                         optional    => 1,
                         description => 'restricted repository; authentication needed (yes/no)',
                         example     => '"restricted" : "no"',
                         default     => 'no',
+                        validator   => $sv->elemOf(qw(yes no)),
+                    },
+                    uname_check => {
+                        optional    => 1,
+                        description => 'check whether publishing from correct branch (yes/no)',
+                        example     => '"uname_check" : "no"',
+                        default     => 'yes',
                         validator   => $sv->elemOf(qw(yes no)),
                     },
                 },
@@ -171,7 +178,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2023 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
