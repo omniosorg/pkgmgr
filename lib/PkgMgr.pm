@@ -305,6 +305,8 @@ sub checkUname {
     my $opts   = shift;
     my $pkgs   = shift;
 
+    return if $config->{REPOS}->{$repo}->{uname_check} eq 'no';
+
     my ($srcRepo, $dstRepo)   = $self->getSrcDstRepos($config, $repo, $opts);
     my ($release, $publisher) = $getReleasePublisher->($config, $repo);
     my $branch = $release =~ /[13579]$/ ? 'master' : "r$release";
@@ -347,7 +349,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
+Copyright 2023 OmniOS Community Edition (OmniOSce) Association.
 
 =head1 LICENSE
 
