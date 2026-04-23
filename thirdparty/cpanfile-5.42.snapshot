@@ -1,0 +1,43 @@
+# carton snapshot format: version 1.0
+DISTRIBUTIONS
+  Convert-ASN1-0.34
+    pathname: T/TI/TIMLEGGE/Convert-ASN1-0.34.tar.gz
+    provides:
+      Convert::ASN1 0.34
+    requirements:
+      ExtUtils::MakeMaker 0
+  Crypt-OpenSSL-Guess-0.15
+    pathname: A/AK/AKIYM/Crypt-OpenSSL-Guess-0.15.tar.gz
+    provides:
+      Crypt::OpenSSL::Guess 0.15
+    requirements:
+      Config 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 6.64
+      File::Spec 0
+      Symbol 0
+      perl 5.008001
+  Crypt-OpenSSL-X509-2.0.1
+    pathname: J/JO/JONASBN/Crypt-OpenSSL-X509-2.0.1.tar.gz
+    provides:
+      Crypt::OpenSSL::X509 2.000001
+    requirements:
+      Config 0
+      Convert::ASN1 0.33
+      Crypt::OpenSSL::Guess 0
+      ExtUtils::MakeMaker 0
+      version 0.77
+  Data-Processor-1.0.9
+    pathname: M/MB/MBP/Data-Processor-1.0.9.tar.gz
+    provides:
+      Data::Processor 1.000009
+      Data::Processor::Error::Collection undef
+      Data::Processor::Error::Instance undef
+      Data::Processor::Generator undef
+      Data::Processor::PodWriter undef
+      Data::Processor::Transformer undef
+      Data::Processor::Validator undef
+      Data::Processor::ValidatorFactory undef
+    requirements:
+      ExtUtils::MakeMaker 0
+      perl 5.008005
