@@ -245,13 +245,12 @@ sub publishPackages {
 
     my ($srcRepo, $dstRepo) = $self->getSrcDstRepos($config, $repo, $opts);
 
-    my @cert = $opts->{pull} || $opts->{export} ? ()
-        : ('--dkey',  $config->{GENERAL}->{key_file},
-           '--dcert', $config->{GENERAL}->{cert_file});
+    my @cert;
+    push @cert, ('--dkey', $config->{GENERAL}->{key_file}, '--dcert', $config->{GENERAL}->{cert_file})
+        if !$opts->{pull} && !$opts->{export} && $dstRepo =~ m!^https?://!;
 
-    push @cert, $config->{REPOS}->{$repo}->{restricted} ne 'yes' ? ()
-        : ('--key',  $config->{GENERAL}->{key_file},
-           '--cert', $config->{GENERAL}->{cert_file});
+    push @cert, ('--key', $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file})
+        if $config->{REPOS}->{$repo}->{restricted} eq 'yes';
 
     # set timeout env variables
     $ENV{PKG_CLIENT_CONNECT_TIMEOUT}  = $config->{GENERAL}->{connect_timeout};
@@ -292,8 +291,11 @@ sub rebuildRepo {
 
     my $repoPath = $self->getRepoPath($config, $repo, $opts);
 
-    my @cmd = ($PKGREPO, qw(rebuild -s), $repoPath, ($opts->{staging} || $opts->{dst} ? ('--key',
-        $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file}) : ()));
+    my @cert;
+    push @cert, ('--key', $config->{GENERAL}->{key_file}, '--cert', $config->{GENERAL}->{cert_file})
+        if $repoPath =~ m!^https?://!;
+
+    my @cmd = ($PKGREPO, qw(rebuild -s), $repoPath, @cert);
 
     system (@cmd) && die "ERROR: rebuilding repo '$repoPath'.\n";
 }
